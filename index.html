@@ -30,6 +30,13 @@
   a{color:inherit; text-decoration:none;}
   img{display:block; max-width:100%;}
 
+  /* Light deterrent against casual photo saving — not foolproof (nothing
+     shown in a browser truly can be), but stops right-click/drag/long-press. */
+  .placeholder img{
+    -webkit-user-drag:none; user-select:none; -webkit-touch-callout:none;
+    pointer-events:none;
+  }
+
   /* ---------- Nav ---------- */
   header.site-nav{
     padding: 72px var(--gap) 20px;
@@ -94,15 +101,25 @@
   .filters button:hover{color:var(--ink);}
   .filters button.active{color:var(--ink); border-bottom-color:var(--ink);}
 
+  /* Explicit columns, built and ordered in JS (see PHOTOS.forEach below)
+     instead of CSS column-count's automatic "balance" layout. Balance mode
+     recalculates from scratch whenever the total photo count changes, which
+     can silently reshuffle which column ANY photo lands in — including ones
+     nowhere near whatever was added or removed. This way, photo N always
+     lands in the same column, deterministically, no matter what else changes. */
   .grid{
-    column-count: 3;
-    column-gap: clamp(2px, 0.6vw, 8px);
+    display:flex;
+    gap: clamp(2px, 0.6vw, 8px);
+  }
+  .grid-col{
+    flex:1 1 0;
+    display:flex;
+    flex-direction:column;
+    gap: clamp(2px, 0.6vw, 8px);
+    min-width:0;
   }
   .plate{
-    display:inline-block;
     width:100%;
-    break-inside: avoid;
-    margin: 0 0 clamp(2px, 0.6vw, 8px);
     transition:opacity .3s ease;
   }
   .plate.hidden{display:none;}
@@ -118,14 +135,10 @@
   }
   .plate .placeholder:hover{opacity:.85;}
   @media (max-width:640px){
-    .grid{column-count:2; column-gap:4px;}
-    .plate{margin-bottom:4px;}
+    .grid{gap:4px;}
+    .grid-col{gap:4px;}
     .filters{gap:18px; flex-wrap:wrap;}
   }
-  @media (max-width:420px){
-    .grid{column-count:1;}
-  }
-
   /* ---------- About ---------- */
   section.about{
     padding: 140px var(--gap) 100px;
@@ -134,7 +147,14 @@
     gap: var(--gap);
     align-items:start;
   }
-  section.about .portrait .placeholder{aspect-ratio:4/5;}
+  section.about .portrait .placeholder{
+    height:auto;
+  }
+  section.about .portrait .placeholder img{
+    position:static;
+    width:100%; height:auto;
+    object-fit:initial;
+  }
   section.about .copy h2{
     font-size:12px; font-weight:500; letter-spacing:.16em; text-transform:uppercase;
     margin:0 0 30px;
@@ -204,84 +224,6 @@
     background:none; border:0; cursor:pointer;
   }
 
-  /* ---------- Curate / edit mode ---------- */
-  footer .edit-toggle{
-    background:none; border:0; cursor:pointer;
-    font-family:inherit;
-    font-size:10px; letter-spacing:.08em; text-transform:uppercase;
-    color:var(--muted); opacity:.55; transition:opacity .2s ease;
-  }
-  footer .edit-toggle:hover{opacity:1;}
-
-  .plate .remove-btn{
-    position:absolute; top:8px; right:8px; z-index:2;
-    width:24px; height:24px; border-radius:50%;
-    background:rgba(0,0,0,.72); color:#fff; border:0;
-    font-size:14px; line-height:1; cursor:pointer;
-    display:none; align-items:center; justify-content:center;
-    opacity:0; transition:opacity .15s ease;
-  }
-  body.editing .plate .remove-btn{display:flex;}
-  body.editing .plate .placeholder:hover .remove-btn{opacity:1;}
-  .plate.removed{display:none;}
-  .plate[draggable="true"] .placeholder{cursor:grab;}
-  .plate.dragging{opacity:.3;}
-  .plate.drag-over .placeholder{outline:2px solid var(--ink); outline-offset:-2px;}
-
-  .edit-bar{
-    position:fixed; left:0; right:0; bottom:0; z-index:150;
-    display:none; align-items:center; justify-content:center; gap:22px;
-    padding:16px var(--gap);
-    background:var(--ink); color:#fff;
-    font-size:11px; letter-spacing:.08em; text-transform:uppercase;
-  }
-  body.editing .edit-bar{display:flex;}
-  .edit-bar button{
-    background:none; border:1px solid rgba(255,255,255,.4); color:#fff;
-    font-family:inherit;
-    padding:7px 16px; cursor:pointer; font-size:10px; letter-spacing:.1em; text-transform:uppercase;
-    transition:border-color .2s ease, opacity .2s ease;
-  }
-  .edit-bar button:hover{border-color:#fff;}
-  .edit-bar button:disabled{opacity:.35; cursor:default;}
-  #dragHint{opacity:.6; font-size:10px;}
-  @media (max-width:640px){
-    .edit-bar{flex-wrap:wrap; gap:12px; text-align:center; padding:14px 20px;}
-  }
-
-  .copy-panel{
-    position:fixed; inset:0; z-index:300;
-    display:none; align-items:center; justify-content:center;
-    background:rgba(10,10,10,.85); padding:40px var(--gap);
-  }
-  .copy-panel.open{display:flex;}
-  .copy-panel-inner{
-    background:#fff; width:100%; max-width:640px;
-    padding:32px; text-align:left;
-  }
-  .copy-panel-inner p{
-    margin:0 0 16px; font-size:13px; line-height:1.6; color:var(--ink);
-  }
-  .copy-panel-inner code{
-    background:var(--panel); padding:1px 5px; font-size:12px;
-  }
-  .copy-panel-inner textarea{
-    width:100%; height:260px; resize:vertical;
-    font-family:ui-monospace, 'SF Mono', Menlo, monospace;
-    font-size:11px; line-height:1.6; color:var(--ink);
-    background:var(--panel); border:1px solid var(--line);
-    padding:14px; box-sizing:border-box;
-  }
-  .copy-panel-actions{
-    display:flex; gap:14px; margin-top:18px; justify-content:flex-end;
-  }
-  .copy-panel-actions button{
-    background:none; border:1px solid var(--ink); color:var(--ink);
-    font-family:inherit;
-    padding:9px 20px; cursor:pointer; font-size:10px; letter-spacing:.1em; text-transform:uppercase;
-    transition:opacity .2s ease;
-  }
-  .copy-panel-actions button:hover{opacity:.65;}
 </style>
 </head>
 <body>
@@ -335,33 +277,13 @@
 </section>
 
 <footer>
-  <span>&copy; 2026 Lorena Oliveira</span>
-  <button class="edit-toggle" id="editToggle" type="button">Curate photos</button>
+  <span>&copy; 2026 Lorena Oliveira. All rights reserved.</span>
   <span>London</span>
 </footer>
 
 <div class="lightbox" id="lightbox">
   <button class="close" id="lightboxClose">Close ✕</button>
   <div class="placeholder"><div class="label">Preview<span>Click a plate to preview it here</span></div></div>
-</div>
-
-<div class="edit-bar" id="editBar">
-  <span id="editCount">0 hidden</span>
-  <span id="dragHint">Drag photos to reorder</span>
-  <button id="copyListBtn" type="button">Copy updated list</button>
-  <button id="restoreAllBtn" type="button">Restore all</button>
-  <button id="doneEditBtn" type="button">Done</button>
-</div>
-
-<div class="copy-panel" id="copyPanel">
-  <div class="copy-panel-inner">
-    <p>Select all (&#8984;/Ctrl+A) and copy (&#8984;/Ctrl+C), then paste this over the <code>const PHOTOS = [ ... ];</code> block in index.html.</p>
-    <textarea id="copyText" readonly spellcheck="false"></textarea>
-    <div class="copy-panel-actions">
-      <button id="copyPanelCopyBtn" type="button">Copy</button>
-      <button id="copyPanelCloseBtn" type="button">Close</button>
-    </div>
-  </div>
 </div>
 
 <script>
@@ -476,171 +398,49 @@
     { file: "IMG_8403.jpeg", category: "connection", w: 1039, h: 1600 },
     { file: "IMG_9394.jpeg", category: "wild", w: 1199, h: 1600 },
     { file: "IMG_9952.jpeg", category: "wild", w: 1200, h: 1600 },
-    { file: "pb-69.jpeg", category: "connection", w: 1066, h: 1599 },
-    { file: "pb-75.jpeg", category: "connection", w: 1066, h: 1600 },
-    { file: "pb-83.jpeg", category: "connection", w: 1066, h: 1599 },
   ];
 
-  // ---------- Photo curation (edit mode) ----------
-  // Hiding a photo here only affects the browser you click "Curate photos"
-  // in — it's a local preview, not a publish. Use "Copy updated list" to
-  // grab the trimmed PHOTOS array and paste it in over the one below, so
-  // the removal shows up for everyone once you republish the site.
-  const REMOVED_KEY = 'lo_removed_photos';
-  function loadRemoved(){
-    try { return new Set(JSON.parse(localStorage.getItem(REMOVED_KEY)) || []); }
-    catch(e){ return new Set(); }
-  }
-  function saveRemoved(set){ localStorage.setItem(REMOVED_KEY, JSON.stringify([...set])); }
-  const removedPhotos = loadRemoved();
-
-  // Custom photo order, set by dragging plates around in edit mode. Only
-  // meaningful with every photo on screen, so dragging is limited to the
-  // "All" filter tab.
-  const ORDER_KEY = 'lo_photo_order';
-  function loadOrder(){
-    try { return JSON.parse(localStorage.getItem(ORDER_KEY)) || []; }
-    catch(e){ return []; }
-  }
-  function saveOrder(fileList){ localStorage.setItem(ORDER_KEY, JSON.stringify(fileList)); }
-
-  const photosByFile = new Map(PHOTOS.map(p => [p.file, p]));
-  const savedOrder = loadOrder().filter(f => photosByFile.has(f));
-  const orderedFiles = [...savedOrder, ...PHOTOS.map(p => p.file).filter(f => !savedOrder.includes(f))];
-
   const grid = document.getElementById('photoGrid');
-  const editBar = document.getElementById('editBar');
-  const editCount = document.getElementById('editCount');
-  const restoreAllBtn = document.getElementById('restoreAllBtn');
-
-  function updateEditCount(){
-    editCount.textContent = `${removedPhotos.size} hidden`;
-    restoreAllBtn.disabled = removedPhotos.size === 0;
-  }
-
-  orderedFiles.forEach((file) => {
-    const { category, w, h } = photosByFile.get(file);
+  const plates = PHOTOS.map(({ file, category, w, h }) => {
     const fig = document.createElement('figure');
-    fig.className = 'plate' + (removedPhotos.has(file) ? ' removed' : '');
+    fig.className = 'plate';
     fig.dataset.category = category;
-    fig.dataset.file = file;
     fig.innerHTML = `
       <div class="placeholder">
         <div class="label">${file}</div>
         <img src="images/${file}" alt="" width="${w}" height="${h}" loading="lazy" onerror="this.style.display='none'" onload="this.parentElement.classList.add('has-image')">
-        <button class="remove-btn" type="button" aria-label="Hide this photo">&times;</button>
       </div>`;
-    fig.querySelector('.remove-btn').addEventListener('click', (e) => {
-      e.stopPropagation();
-      removedPhotos.add(file);
-      saveRemoved(removedPhotos);
-      fig.classList.add('removed');
-      updateEditCount();
+    return fig;
+  });
+
+  // Photos are dealt round-robin into a fixed number of column containers
+  // (photo 1 -> column 1, photo 2 -> column 2, photo 3 -> column 3, photo 4
+  // -> column 1, ...) so "the Nth photo" always means exactly that, in the
+  // same column, forever — see the note above .grid in the stylesheet.
+  function columnCountForWidth(width){
+    if (width <= 420) return 1;
+    if (width <= 640) return 2;
+    return 3;
+  }
+  let currentColumnCount = null;
+  function layoutColumns(){
+    const count = columnCountForWidth(window.innerWidth);
+    if (count === currentColumnCount) return;
+    currentColumnCount = count;
+    grid.innerHTML = '';
+    const cols = Array.from({ length: count }, () => {
+      const col = document.createElement('div');
+      col.className = 'grid-col';
+      grid.appendChild(col);
+      return col;
     });
-    grid.appendChild(fig);
-  });
-  updateEditCount();
-
-  // Plain drag-and-drop, directly on the grid. The grid only actually
-  // rearranges once, on drop — not continuously while dragging — since
-  // moving elements live on every dragover is what reflows the whole
-  // masonry layout under the cursor and makes it feel glitchy. A drop
-  // target just gets a highlight until you let go.
-  function persistOrder(){
-    saveOrder([...grid.querySelectorAll('.plate')].map(p => p.dataset.file));
+    plates.forEach((fig, i) => cols[i % count].appendChild(fig));
   }
-  let draggingFig = null;
-  let dragOverFig = null;
-  function clearDragOver(){
-    if (dragOverFig) dragOverFig.classList.remove('drag-over');
-    dragOverFig = null;
-  }
-  grid.addEventListener('dragstart', (e) => {
-    const fig = e.target.closest('.plate');
-    if (!fig || !fig.draggable) return;
-    draggingFig = fig;
-    fig.classList.add('dragging');
-    e.dataTransfer.effectAllowed = 'move';
-    e.dataTransfer.setData('text/plain', fig.dataset.file);
-  });
-  grid.addEventListener('dragover', (e) => {
-    if (!draggingFig) return;
-    e.preventDefault();
-    const target = e.target.closest('.plate');
-    if (!target || target === draggingFig) {
-      clearDragOver();
-      return;
-    }
-    if (target !== dragOverFig) {
-      clearDragOver();
-      dragOverFig = target;
-      dragOverFig.classList.add('drag-over');
-    }
-  });
-  grid.addEventListener('drop', (e) => {
-    if (!draggingFig) return;
-    e.preventDefault();
-    const target = dragOverFig;
-    if (target && target !== draggingFig) {
-      const rect = target.getBoundingClientRect();
-      const before = (e.clientY - rect.top) < rect.height / 2;
-      grid.insertBefore(draggingFig, before ? target : target.nextSibling);
-      persistOrder();
-    }
-    clearDragOver();
-  });
-  grid.addEventListener('dragend', () => {
-    if (draggingFig) draggingFig.classList.remove('dragging');
-    draggingFig = null;
-    clearDragOver();
-  });
-  function refreshDraggable(){
-    document.querySelectorAll('.plate').forEach(p => { p.draggable = document.body.classList.contains('editing'); });
-  }
-  refreshDraggable();
-
-  document.getElementById('editToggle').addEventListener('click', () => {
-    document.body.classList.toggle('editing');
-    refreshDraggable();
-  });
-  document.getElementById('doneEditBtn').addEventListener('click', () => {
-    document.body.classList.remove('editing');
-    refreshDraggable();
-  });
-  restoreAllBtn.addEventListener('click', () => {
-    removedPhotos.clear();
-    saveRemoved(removedPhotos);
-    document.querySelectorAll('.plate.removed').forEach(p => p.classList.remove('removed'));
-    updateEditCount();
-  });
-  const copyPanel = document.getElementById('copyPanel');
-  const copyText = document.getElementById('copyText');
-  document.getElementById('copyListBtn').addEventListener('click', () => {
-    const kept = [...grid.querySelectorAll('.plate')]
-      .filter(p => !removedPhotos.has(p.dataset.file))
-      .map(p => photosByFile.get(p.dataset.file));
-    const lines = kept.map(p => `    { file: "${p.file}", category: "${p.category}", w: ${p.w}, h: ${p.h} },`).join('\n');
-    const text = `const PHOTOS = [\n${lines}\n  ];`;
-    copyText.value = text;
-    copyPanel.classList.add('open');
-    copyText.focus();
-    copyText.select();
-    // Best-effort auto-copy — silently ignored where the browser blocks it
-    // (common on file:// pages); the textarea above is the reliable fallback.
-    navigator.clipboard?.writeText(text)?.catch(() => {});
-  });
-  document.getElementById('copyPanelCopyBtn').addEventListener('click', (e) => {
-    copyText.focus();
-    copyText.select();
-    let ok = false;
-    try { ok = document.execCommand('copy'); } catch (err) {}
-    const label = e.target;
-    const original = label.textContent;
-    label.textContent = ok ? 'Copied ✓' : 'Press ⌘/Ctrl+C';
-    setTimeout(() => { label.textContent = original; }, 1800);
-  });
-  document.getElementById('copyPanelCloseBtn').addEventListener('click', () => {
-    copyPanel.classList.remove('open');
+  layoutColumns();
+  let resizeTimer;
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(layoutColumns, 150);
   });
 
   // category filter tabs
@@ -662,10 +462,7 @@
   document.querySelectorAll('.plate .placeholder').forEach(el => {
     el.style.cursor = 'zoom-in';
     el.addEventListener('click', () => {
-      if (document.body.classList.contains('editing')) return;
-      const clone = el.cloneNode(true);
-      clone.querySelector('.remove-btn')?.remove();
-      lightboxInner.innerHTML = clone.innerHTML;
+      lightboxInner.innerHTML = el.innerHTML;
       lightbox.classList.add('open');
     });
   });
