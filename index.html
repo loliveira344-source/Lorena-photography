@@ -59,9 +59,17 @@
     text-transform:uppercase;
     font-weight:300;
     color:var(--muted);
-    transition:color .2s ease;
+    padding-bottom:4px;
+    border-bottom:1px solid transparent;
+    transition:color .2s ease, border-color .2s ease;
   }
   nav.links a:hover{color:var(--ink);}
+  nav.links a.active{color:var(--ink); border-bottom-color:var(--ink);}
+
+  /* ---------- Page sections (tab-switched, not scrolled to) ---------- */
+  /* !important: each section's own rule (e.g. section.about's display:grid)
+     otherwise outranks this on specificity and stays visible when inactive. */
+  .site-section:not(.active){display:none !important;}
 
   /* ---------- Placeholder photo blocks ---------- */
   .placeholder{
@@ -149,11 +157,13 @@
   }
   section.about .portrait .placeholder{
     height:auto;
+    aspect-ratio: 4 / 5;
   }
   section.about .portrait .placeholder img{
     position:static;
-    width:100%; height:auto;
-    object-fit:initial;
+    width:100%; height:100%;
+    object-fit:cover;
+    object-position:center 35%;
   }
   section.about .copy h2{
     font-size:12px; font-weight:500; letter-spacing:.16em; text-transform:uppercase;
@@ -236,15 +246,15 @@
 <body>
 
 <header class="site-nav" id="top">
-  <a href="#top" class="logo">Lorena Oliveira</a>
+  <a href="#work" class="logo" data-section="work">Lorena Oliveira</a>
   <nav class="links">
-    <a href="#work">Work</a>
-    <a href="#about">About</a>
-    <a href="#contact">Contact</a>
+    <a href="#work" data-section="work">Work</a>
+    <a href="#about" data-section="about">About</a>
+    <a href="#contact" data-section="contact">Contact</a>
   </nav>
 </header>
 
-<section class="work" id="work">
+<section class="work site-section active" id="work">
   <div class="filters" id="filters">
     <button data-filter="all" class="active">All</button>
     <button data-filter="golden">Golden Hour</button>
@@ -256,7 +266,7 @@
   <div class="grid" id="photoGrid"></div>
 </section>
 
-<section class="about" id="about">
+<section class="about site-section" id="about">
   <div class="portrait">
     <div class="placeholder">
       <div class="label">Portrait<span>images/portrait.jpg</span></div>
@@ -275,7 +285,7 @@
   </div>
 </section>
 
-<section class="contact" id="contact">
+<section class="contact site-section" id="contact">
   <a class="email" href="mailto:lorenaphotoco@gmail.com">lorenaphotoco@gmail.com</a>
   <div class="social">
     <a href="https://www.instagram.com/lorenatropicalia/" target="_blank" rel="noopener">Instagram</a>
@@ -459,6 +469,23 @@
     clearTimeout(resizeTimer);
     resizeTimer = setTimeout(layoutColumns, 150);
   });
+
+  // top nav: Work / About / Contact switch instantly, like the category
+  // filters do, instead of scrolling to an anchor.
+  const navLinks = document.querySelectorAll('[data-section]');
+  const sections = document.querySelectorAll('.site-section');
+  function showSection(name){
+    sections.forEach(sec => sec.classList.toggle('active', sec.id === name));
+    navLinks.forEach(a => a.classList.toggle('active', a.dataset.section === name));
+    window.scrollTo(0, 0);
+  }
+  navLinks.forEach(a => {
+    a.addEventListener('click', (e) => {
+      e.preventDefault();
+      showSection(a.dataset.section);
+    });
+  });
+  showSection('work');
 
   // category filter tabs
   document.querySelectorAll('.filters button').forEach(btn => {
