@@ -18,9 +18,10 @@
     --gap: clamp(24px, 6vw, 88px);
   }
   *{box-sizing:border-box;}
-  html{scroll-behavior:smooth;}
+  html{scroll-behavior:smooth; overflow-x:hidden;}
   body{
     margin:0;
+    overflow-x:hidden;
     background:var(--paper);
     color:var(--ink);
     font-family:'Inter', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif;
@@ -117,6 +118,8 @@
      lands in the same column, deterministically, no matter what else changes. */
   .grid{
     display:flex;
+    width:100%;
+    max-width:100%;
     gap: clamp(2px, 0.6vw, 8px);
   }
   .grid-col{
@@ -142,6 +145,12 @@
   }
   .plate .placeholder:hover{opacity:.85;}
   @media (max-width:640px){
+    /* Fixed px instead of the vw-based clamp() here: iOS Safari can compute
+       vw very slightly wider than the true visible viewport, which pushed
+       this padding — and the grid inside it — a few px past the right edge
+       on iPhone even though it measured fine in desktop testing. A fixed
+       value sidesteps that vw quirk entirely on mobile. */
+    :root{ --gap: 20px; }
     .grid{gap:4px;}
     .grid-col{gap:4px;}
     .filters{gap:18px; flex-wrap:wrap;}
