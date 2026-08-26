@@ -130,7 +130,6 @@
     width:100%;
     transition:opacity .3s ease;
   }
-  .plate.hidden{display:none;}
   .plate .placeholder{
     height:auto;
     min-height:60px;
@@ -442,9 +441,15 @@
     return 3;
   }
   let currentColumnCount = null;
-  function layoutColumns(){
+  let currentFilter = 'all';
+
+  // Rebuilds the columns from scratch for whichever photos currently match
+  // currentFilter, so the height-balancing only ever has to balance the
+  // photos actually on screen. Balancing across the full set and then just
+  // hiding non-matching ones (the old approach) left each filtered view
+  // with whatever uneven leftovers happened to land in each column.
+  function buildColumns(){
     const count = columnCountForWidth(window.innerWidth);
-    if (count === currentColumnCount) return;
     currentColumnCount = count;
     grid.innerHTML = '';
     const cols = Array.from({ length: count }, () => {
@@ -455,6 +460,7 @@
     });
     const heights = new Array(count).fill(0);
     plates.forEach((fig, i) => {
+      if (currentFilter !== 'all' && PHOTOS[i].category !== currentFilter) return;
       let shortest = 0;
       for (let c = 1; c < count; c++) {
         if (heights[c] < heights[shortest]) shortest = c;
@@ -463,7 +469,12 @@
       heights[shortest] += PHOTOS[i].h / PHOTOS[i].w;
     });
   }
-  layoutColumns();
+  function layoutColumns(){
+    const count = columnCountForWidth(window.innerWidth);
+    if (count === currentColumnCount) return;
+    buildColumns();
+  }
+  buildColumns();
   let resizeTimer;
   window.addEventListener('resize', () => {
     clearTimeout(resizeTimer);
@@ -492,11 +503,8 @@
     btn.addEventListener('click', () => {
       document.querySelectorAll('.filters button').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
-      const filter = btn.dataset.filter;
-      document.querySelectorAll('.plate').forEach(plate => {
-        const show = filter === 'all' || plate.dataset.category === filter;
-        plate.classList.toggle('hidden', !show);
-      });
+      currentFilter = btn.dataset.filter;
+      buildColumns();
     });
   });
 
