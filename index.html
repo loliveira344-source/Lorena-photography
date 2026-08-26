@@ -1,1 +1,491 @@
- /Users/lorenaoliveira/Documents/Website/index.html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lorena Oliveira — Documentary &amp; Travel Photography, London</title>
+<meta name="description" content="Documentary and travel photography portfolio based in London.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#000000;
+    --paper:#ffffff;
+    --line:#e5e5e5;
+    --muted:#8c8c8c;
+    --panel:#f2f2f2;
+    --gap: clamp(24px, 6vw, 88px);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Inter', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif;
+    font-weight:300;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit; text-decoration:none;}
+  img{display:block; max-width:100%;}
+
+  /* Light deterrent against casual photo saving — not foolproof (nothing
+     shown in a browser truly can be), but stops right-click/drag/long-press. */
+  .placeholder img{
+    -webkit-user-drag:none; user-select:none; -webkit-touch-callout:none;
+    pointer-events:none;
+  }
+
+  /* ---------- Nav ---------- */
+  header.site-nav{
+    padding: 72px var(--gap) 20px;
+    text-align:center;
+  }
+  .logo{
+    display:block;
+    font-size:15px;
+    font-weight:400;
+    letter-spacing:0.2em;
+    text-transform:uppercase;
+  }
+  nav.links{
+    display:flex; gap:28px; justify-content:center;
+    margin-top:18px;
+  }
+  nav.links a{
+    font-size:11px;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    font-weight:300;
+    color:var(--muted);
+    transition:color .2s ease;
+  }
+  nav.links a:hover{color:var(--ink);}
+
+  /* ---------- Placeholder photo blocks ---------- */
+  .placeholder{
+    position:relative;
+    width:100%; height:100%;
+    background: var(--panel);
+    display:flex; align-items:center; justify-content:center;
+    overflow:hidden;
+  }
+  .placeholder img{
+    position:absolute; inset:0; width:100%; height:100%; object-fit:cover;
+  }
+  .placeholder .label{
+    position:relative; z-index:1;
+    font-size:10px; letter-spacing:.14em; text-transform:uppercase;
+    color:var(--muted);
+    text-align:center; padding:0 20px;
+  }
+  .placeholder .label span{display:block; margin-top:6px; font-size:9px; opacity:.7;}
+  .placeholder.has-image .label{display:none;}
+
+  /* ---------- Work / gallery ---------- */
+  section.work{
+    padding: 20px var(--gap) 0;
+  }
+  .filters{
+    display:flex; gap:26px; justify-content:center;
+    margin-bottom: 40px;
+  }
+  .filters button{
+    background:none; border:0; cursor:pointer; padding:0 0 4px;
+    font-size:11px; letter-spacing:.16em; text-transform:uppercase;
+    color:var(--muted);
+    border-bottom:1px solid transparent;
+    transition:color .2s ease, border-color .2s ease;
+  }
+  .filters button:hover{color:var(--ink);}
+  .filters button.active{color:var(--ink); border-bottom-color:var(--ink);}
+
+  /* Explicit columns, built and ordered in JS (see PHOTOS.forEach below)
+     instead of CSS column-count's automatic "balance" layout. Balance mode
+     recalculates from scratch whenever the total photo count changes, which
+     can silently reshuffle which column ANY photo lands in — including ones
+     nowhere near whatever was added or removed. This way, photo N always
+     lands in the same column, deterministically, no matter what else changes. */
+  .grid{
+    display:flex;
+    gap: clamp(2px, 0.6vw, 8px);
+  }
+  .grid-col{
+    flex:1 1 0;
+    display:flex;
+    flex-direction:column;
+    gap: clamp(2px, 0.6vw, 8px);
+    min-width:0;
+  }
+  .plate{
+    width:100%;
+    transition:opacity .3s ease;
+  }
+  .plate.hidden{display:none;}
+  .plate .placeholder{
+    height:auto;
+    min-height:60px;
+  }
+  .plate .placeholder img{
+    position:static;
+    width:100%;
+    height:auto;
+    object-fit:initial;
+  }
+  .plate .placeholder:hover{opacity:.85;}
+  @media (max-width:640px){
+    .grid{gap:4px;}
+    .grid-col{gap:4px;}
+    .filters{gap:18px; flex-wrap:wrap;}
+  }
+  /* ---------- About ---------- */
+  section.about{
+    padding: 140px var(--gap) 100px;
+    display:grid;
+    grid-template-columns: 0.85fr 1.15fr;
+    gap: var(--gap);
+    align-items:start;
+  }
+  section.about .portrait .placeholder{
+    height:auto;
+  }
+  section.about .portrait .placeholder img{
+    position:static;
+    width:100%; height:auto;
+    object-fit:initial;
+  }
+  section.about .copy h2{
+    font-size:12px; font-weight:500; letter-spacing:.16em; text-transform:uppercase;
+    margin:0 0 30px;
+  }
+  section.about .copy p{
+    font-size:16px; line-height:1.8; font-weight:300; color:var(--ink);
+    max-width:46ch;
+    margin:0 0 22px;
+  }
+  section.about .facts{
+    margin-top:40px; padding-top:26px; border-top:1px solid var(--line);
+    font-size:11px; letter-spacing:.1em; color:var(--muted); line-height:2.1;
+    text-transform:uppercase;
+  }
+  @media (max-width:800px){
+    section.about{grid-template-columns:1fr; padding-top:100px;}
+  }
+
+  /* ---------- Contact ---------- */
+  section.contact{
+    padding: 130px var(--gap) 110px;
+    text-align:center;
+  }
+  section.contact .email{
+    font-size:13px;
+    font-weight:300;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    display:inline-block;
+    border-bottom:1px solid var(--ink);
+    padding-bottom:6px;
+  }
+  section.contact .social{
+    margin-top:44px;
+    display:flex; gap:28px; justify-content:center;
+    font-size:11px; letter-spacing:.14em; text-transform:uppercase;
+  }
+  section.contact .social a{opacity:.7; transition:opacity .2s ease;}
+  section.contact .social a:hover{opacity:1;}
+
+  footer{
+    padding:28px var(--gap) 44px;
+    display:flex; justify-content:space-between;
+    font-size:10px; letter-spacing:.08em; color:var(--muted);
+  }
+
+  /* ---------- Lightbox ---------- */
+  .lightbox{
+    position:fixed; inset:0; background:rgba(10,10,10,.96); z-index:200;
+    display:none; align-items:center; justify-content:center; padding:40px;
+  }
+  .lightbox.open{display:flex;}
+  .lightbox .placeholder{
+    width:auto; height:auto; max-width:92vw; max-height:88vh;
+    background:none;
+  }
+  .lightbox .placeholder img{
+    position:static;
+    width:auto; height:auto;
+    max-width:92vw; max-height:88vh;
+    object-fit:contain;
+    margin:0 auto;
+  }
+  .lightbox .close{
+    position:absolute; top:26px; right:var(--gap);
+    color:#fff; font-size:12px; letter-spacing:.14em; text-transform:uppercase;
+    background:none; border:0; cursor:pointer;
+  }
+
+  /* ---------- Mobile spacing ---------- */
+  @media (max-width:640px){
+    header.site-nav{padding:48px var(--gap) 16px;}
+    section.about{padding:80px var(--gap) 60px;}
+    section.contact{padding:80px var(--gap) 70px;}
+  }
+
+</style>
+</head>
+<body>
+
+<header class="site-nav" id="top">
+  <a href="#top" class="logo">Lorena Oliveira</a>
+  <nav class="links">
+    <a href="#work">Work</a>
+    <a href="#about">About</a>
+    <a href="#contact">Contact</a>
+  </nav>
+</header>
+
+<section class="work" id="work">
+  <div class="filters" id="filters">
+    <button data-filter="all" class="active">All</button>
+    <button data-filter="golden">Golden Hour</button>
+    <button data-filter="coastal">Coastal</button>
+    <button data-filter="wanderlust">Wanderlust</button>
+    <button data-filter="connection">Connection</button>
+    <button data-filter="wild">Wild</button>
+  </div>
+  <div class="grid" id="photoGrid"></div>
+</section>
+
+<section class="about" id="about">
+  <div class="portrait">
+    <div class="placeholder">
+      <div class="label">Portrait<span>images/portrait.jpg</span></div>
+      <img src="images/portrait.jpg" alt="" onerror="this.style.display='none'" onload="this.parentElement.classList.add('has-image')">
+    </div>
+  </div>
+  <div class="copy">
+    <h2>About</h2>
+    <p>Brazilian photographer Lorena Oliveira is drawn to the raw beauty of the natural world and the unscripted, intimate moments that flash by in an instant. She feels a scene before she frames it- an intuitive, perceptive approach that brings depth and authenticity to every photo.</p>
+    <p>A woman of the world, she's lived across South America, the US, and Europe, and traveled to over 30 countries. Fluent in English, Spanish, and Portuguese, she brings intention, cultural depth, and a focus on human connection to every partnership. She is based in London.</p>
+    <div class="facts">
+      Based in London, UK<br>
+      Available for commissions &amp; collaborations<br>
+      English &middot; Spanish &middot; Portuguese
+    </div>
+  </div>
+</section>
+
+<section class="contact" id="contact">
+  <a class="email" href="mailto:lorenaphotoco@gmail.com">lorenaphotoco@gmail.com</a>
+  <div class="social">
+    <a href="https://www.instagram.com/lorenatropicalia/" target="_blank" rel="noopener">Instagram</a>
+    <a href="https://www.linkedin.com/in/lorenaoliveiraaa/" target="_blank" rel="noopener">LinkedIn</a>
+  </div>
+</section>
+
+<footer>
+  <span>&copy; 2026 Lorena Oliveira. All rights reserved.</span>
+  <span>London</span>
+</footer>
+
+<div class="lightbox" id="lightbox">
+  <button class="close" id="lightboxClose">Close ✕</button>
+  <div class="placeholder"><div class="label">Preview<span>Click a plate to preview it here</span></div></div>
+</div>
+
+<script>
+  // The full photo set, each tagged with a category so the filter tabs
+  // above the grid can show/hide it. w/h are the actual pixel dimensions
+  // of the file, used so the masonry grid can reserve the right amount
+  // of space before the image finishes loading. Add new photos by
+  // appending { file: "yourfile.jpg", category: "golden", w: 1600, h: 1066 }
+  // — categories are: golden, coastal, wanderlust, connection, wild.
+  const PHOTOS = [
+    { file: "DSCF7379.jpeg", category: "coastal", w: 1066, h: 1600 },
+    { file: "DSC_6955.jpeg", category: "connection", w: 1066, h: 1600 },
+    { file: "DSC_7054.jpeg", category: "coastal", w: 1107, h: 1599 },
+    { file: "DSC_9313.jpeg", category: "coastal", w: 1066, h: 1600 },
+    { file: "DSCF1205.jpeg", category: "coastal", w: 1600, h: 1066 },
+    { file: "DSC_9145.jpeg", category: "golden", w: 1066, h: 1600 },
+    { file: "DSCF3411.jpeg", category: "coastal", w: 1066, h: 1600 },
+    { file: "DSCF5118.jpeg", category: "golden", w: 1600, h: 1066 },
+    { file: "DSC_3222.jpeg", category: "coastal", w: 1066, h: 1600 },
+    { file: "DSC_9294.jpeg", category: "connection", w: 1066, h: 1600 },
+    { file: "DSCF6556.jpeg", category: "coastal", w: 1600, h: 1066 },
+    { file: "IMG_7134.jpeg", category: "connection", w: 1144, h: 1600 },
+    { file: "DSCF3532.jpeg", category: "wanderlust", w: 1066, h: 1600 },
+    { file: "DSCF4386.jpeg", category: "wanderlust", w: 1066, h: 1600 },
+    { file: "DSCF3929.jpeg", category: "wild", w: 1600, h: 1066 },
+    { file: "DSCF4084.jpeg", category: "wanderlust", w: 1066, h: 1600 },
+    { file: "DSCF4121.jpeg", category: "wanderlust", w: 1600, h: 1066 },
+    { file: "DSCF4232.jpeg", category: "wanderlust", w: 1066, h: 1600 },
+    { file: "DSCF5572.jpeg", category: "coastal", w: 1600, h: 1066 },
+    { file: "DSCF4977.jpeg", category: "golden", w: 1066, h: 1600 },
+    { file: "DSCF6504.jpeg", category: "coastal", w: 1600, h: 1066 },
+    { file: "DSCF5065.jpeg", category: "connection", w: 1066, h: 1600 },
+    { file: "DSCF5036.jpeg", category: "wanderlust", w: 1600, h: 1066 },
+    { file: "DSCF1206.jpeg", category: "wanderlust", w: 1600, h: 1066 },
+    { file: "DSCF5295.jpeg", category: "coastal", w: 1600, h: 1066 },
+    { file: "DSCF5879.jpeg", category: "connection", w: 1600, h: 1066 },
+    { file: "DSCF5639.jpeg", category: "coastal", w: 1600, h: 1066 },
+    { file: "DSCF4539.jpeg", category: "wanderlust", w: 1600, h: 1066 },
+    { file: "DSCF6265.jpeg", category: "wild", w: 1600, h: 1066 },
+    { file: "DSC_2671.jpeg", category: "connection", w: 1006, h: 1600 },
+    { file: "DSCF7245.jpeg", category: "coastal", w: 1066, h: 1600 },
+    { file: "DSCF6488.jpeg", category: "coastal", w: 1600, h: 1066 },
+    { file: "DSCF6361.jpeg", category: "wanderlust", w: 1066, h: 1600 },
+    { file: "DSC_8999.jpeg", category: "wanderlust", w: 1066, h: 1600 },
+    { file: "DSCF5067.jpeg", category: "coastal", w: 1600, h: 1066 },
+    { file: "DSC_3259.jpeg", category: "connection", w: 1066, h: 1600 },
+    { file: "DSC_2626.jpeg", category: "connection", w: 1600, h: 1066 },
+    { file: "DSCF6531.jpeg", category: "coastal", w: 1600, h: 1066 },
+    { file: "DSCF6558.jpeg", category: "coastal", w: 1600, h: 1066 },
+    { file: "DSCF6599.jpeg", category: "golden", w: 1600, h: 1066 },
+    { file: "DSC_5815.jpeg", category: "connection", w: 1066, h: 1600 },
+    { file: "IMG_9952.jpeg", category: "wild", w: 1200, h: 1600 },
+    { file: "DSCF6660.jpeg", category: "coastal", w: 1600, h: 1066 },
+    { file: "DSCF2280.jpeg", category: "connection", w: 1600, h: 1066 },
+    { file: "IMG_1152.jpeg", category: "wild", w: 1200, h: 1600 },
+    { file: "DSC_2705.jpeg", category: "connection", w: 1066, h: 1600 },
+    { file: "DSCF7590.jpeg", category: "coastal", w: 1600, h: 1066 },
+    { file: "DSC_7393.jpeg", category: "coastal", w: 1066, h: 1599 },
+    { file: "DSCF4135.jpeg", category: "wild", w: 1600, h: 1066 },
+    { file: "DSCF6737.jpeg", category: "coastal", w: 1066, h: 1600 },
+    { file: "DSCF7370.jpeg", category: "coastal", w: 1066, h: 1600 },
+    { file: "DSCF2767.jpeg", category: "wanderlust", w: 1066, h: 1600 },
+    { file: "DSCF6458.jpeg", category: "coastal", w: 1600, h: 1066 },
+    { file: "DSCF6678.jpeg", category: "coastal", w: 1066, h: 1600 },
+    { file: "DSC_7106.jpeg", category: "coastal", w: 1066, h: 1600 },
+    { file: "DSCF7824.jpeg", category: "wild", w: 1600, h: 1066 },
+    { file: "DSCF7890.jpeg", category: "golden", w: 1600, h: 1066 },
+    { file: "DSCF8007.jpeg", category: "wanderlust", w: 1066, h: 1600 },
+    { file: "DSC_0363.jpeg", category: "connection", w: 1066, h: 1600 },
+    { file: "DSC_0890.jpeg", category: "wild", w: 1600, h: 1066 },
+    { file: "DSC_0948.jpeg", category: "wild", w: 1066, h: 1600 },
+    { file: "DSC_0968.jpeg", category: "wild", w: 1600, h: 1066 },
+    { file: "DSC_1420.jpeg", category: "coastal", w: 1066, h: 1600 },
+    { file: "DSC_2685.jpeg", category: "wanderlust", w: 1066, h: 1600 },
+    { file: "DSC_3527.jpeg", category: "coastal", w: 1066, h: 1600 },
+    { file: "DSC_2751.jpeg", category: "wanderlust", w: 1066, h: 1600 },
+    { file: "DSC_2959.jpeg", category: "coastal", w: 1066, h: 1600 },
+    { file: "DSC_4479.jpeg", category: "wild", w: 1600, h: 1066 },
+    { file: "DSC_5335.jpeg", category: "wanderlust", w: 1066, h: 1600 },
+    { file: "DSC_5628.jpeg", category: "wild", w: 1066, h: 1600 },
+    { file: "DSCF6528.jpeg", category: "connection", w: 1600, h: 1066 },
+    { file: "DSC_6133.jpeg", category: "wanderlust", w: 1600, h: 1066 },
+    { file: "DSC_6156.jpeg", category: "wild", w: 1066, h: 1600 },
+    { file: "DSC_6467.jpeg", category: "wanderlust", w: 1600, h: 1066 },
+    { file: "DSC_9984.jpeg", category: "golden", w: 1066, h: 1600 },
+    { file: "DSC_7479.jpeg", category: "wild", w: 1066, h: 1600 },
+    { file: "DSCF0593.jpeg", category: "connection", w: 1066, h: 1600 },
+    { file: "DSCF2770.jpeg", category: "wanderlust", w: 1066, h: 1600 },
+    { file: "DSCF1302.jpeg", category: "golden", w: 1066, h: 1600 },
+    { file: "DSC_9114.jpeg", category: "wanderlust", w: 1066, h: 1600 },
+    { file: "DSC_6785.jpeg", category: "connection", w: 1066, h: 1600 },
+    { file: "DSC_0755.jpeg", category: "wild", w: 1016, h: 1600 },
+    { file: "DSC_7728.jpeg", category: "wanderlust", w: 1066, h: 1600 },
+    { file: "DSC_9420.jpeg", category: "golden", w: 1066, h: 1600 },
+    { file: "IMG_8403.jpeg", category: "connection", w: 1039, h: 1600 },
+    { file: "DSC_8988.jpeg", category: "wanderlust", w: 1066, h: 1600 },
+    { file: "DSCF3970.jpeg", category: "wanderlust", w: 1600, h: 1066 },
+    { file: "DSC_9276.jpeg", category: "coastal", w: 1066, h: 1600 },
+    { file: "DSC_6613.jpeg", category: "wanderlust", w: 1066, h: 1600 },
+    { file: "DSCF5079.jpeg", category: "coastal", w: 1600, h: 1066 },
+    { file: "IMG_1334.jpeg", category: "coastal", w: 1200, h: 1600 },
+    { file: "IMG_1385.jpeg", category: "wild", w: 1200, h: 1600 },
+    { file: "IMG_3266.jpeg", category: "golden", w: 1200, h: 1600 },
+    { file: "IMG_3756.jpeg", category: "wanderlust", w: 1200, h: 1600 },
+    { file: "IMG_4035.jpeg", category: "wild", w: 1200, h: 1600 },
+    { file: "IMG_4038.jpeg", category: "wild", w: 1200, h: 1600 },
+    { file: "IMG_4528.jpeg", category: "connection", w: 1198, h: 1600 },
+    { file: "IMG_5110.jpeg", category: "wanderlust", w: 1200, h: 1600 },
+    { file: "IMG_1365.jpeg", category: "wild", w: 1200, h: 1600 },
+    { file: "IMG_5161.jpeg", category: "coastal", w: 1200, h: 1600 },
+    { file: "IMG_5352.jpeg", category: "coastal", w: 1200, h: 1600 },
+    { file: "IMG_6623.jpeg", category: "wild", w: 1199, h: 1600 },
+    { file: "IMG_9394.jpeg", category: "wild", w: 1199, h: 1600 },
+    { file: "DSC_7934.jpeg", category: "wanderlust", w: 1600, h: 1066 },
+  ];
+
+  const grid = document.getElementById('photoGrid');
+  const plates = PHOTOS.map(({ file, category, w, h }) => {
+    const fig = document.createElement('figure');
+    fig.className = 'plate';
+    fig.dataset.category = category;
+    fig.innerHTML = `
+      <div class="placeholder">
+        <div class="label">${file}</div>
+        <img src="images/${file}" alt="" width="${w}" height="${h}" loading="lazy" onerror="this.style.display='none'" onload="this.parentElement.classList.add('has-image')">
+      </div>`;
+    return fig;
+  });
+
+  // Photos are dealt into whichever column is currently shortest, using each
+  // photo's aspect ratio as a stand-in for its rendered height (columns are
+  // always equal width, so h/w ranks them correctly without a real layout
+  // pass). This keeps column heights balanced end-to-end instead of the
+  // holes a fixed round-robin can leave when one column's photos happen to
+  // run shorter than the others.
+  function columnCountForWidth(width){
+    if (width <= 340) return 1;
+    if (width <= 900) return 2;
+    return 3;
+  }
+  let currentColumnCount = null;
+  function layoutColumns(){
+    const count = columnCountForWidth(window.innerWidth);
+    if (count === currentColumnCount) return;
+    currentColumnCount = count;
+    grid.innerHTML = '';
+    const cols = Array.from({ length: count }, () => {
+      const col = document.createElement('div');
+      col.className = 'grid-col';
+      grid.appendChild(col);
+      return col;
+    });
+    const heights = new Array(count).fill(0);
+    plates.forEach((fig, i) => {
+      let shortest = 0;
+      for (let c = 1; c < count; c++) {
+        if (heights[c] < heights[shortest]) shortest = c;
+      }
+      cols[shortest].appendChild(fig);
+      heights[shortest] += PHOTOS[i].h / PHOTOS[i].w;
+    });
+  }
+  layoutColumns();
+  let resizeTimer;
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(layoutColumns, 150);
+  });
+
+  // category filter tabs
+  document.querySelectorAll('.filters button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.filters button').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const filter = btn.dataset.filter;
+      document.querySelectorAll('.plate').forEach(plate => {
+        const show = filter === 'all' || plate.dataset.category === filter;
+        plate.classList.toggle('hidden', !show);
+      });
+    });
+  });
+
+  // simple lightbox: click a plate to view it larger
+  const lightbox = document.getElementById('lightbox');
+  const lightboxInner = lightbox.querySelector('.placeholder');
+  document.querySelectorAll('.plate .placeholder').forEach(el => {
+    el.style.cursor = 'zoom-in';
+    el.addEventListener('click', () => {
+      lightboxInner.innerHTML = el.innerHTML;
+      lightbox.classList.add('open');
+    });
+  });
+  document.getElementById('lightboxClose').addEventListener('click', () => lightbox.classList.remove('open'));
+  lightbox.addEventListener('click', (e) => { if (e.target === lightbox) lightbox.classList.remove('open'); });
+</script>
+
+</body>
+</html>
