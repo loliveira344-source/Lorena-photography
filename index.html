@@ -18,10 +18,14 @@
     --gap: clamp(24px, 6vw, 88px);
   }
   *{box-sizing:border-box;}
-  html{scroll-behavior:smooth; overflow-x:hidden;}
+  html{scroll-behavior:smooth; position:relative; width:100%; max-width:100%; overflow-x:hidden; overflow-x:clip;}
   body{
     margin:0;
+    position:relative;
+    width:100%;
+    max-width:100%;
     overflow-x:hidden;
+    overflow-x:clip;
     background:var(--paper);
     color:var(--ink);
     font-family:'Inter', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif;
@@ -330,6 +334,7 @@
     { file: "DSC_2174.jpg", category: "wanderlust", w: 1600, h: 1067 },
     { file: "DSC_1448.jpeg", category: "coastal", w: 1066, h: 1600 },
     { file: "DSCF6556.jpeg", category: "coastal", w: 1600, h: 1066 },
+    { file: "DSC_2705.jpeg", category: "connection", w: 1066, h: 1600 },
     { file: "DSC_9294.jpeg", category: "connection", w: 1066, h: 1600 },
     { file: "IMG_7134.jpeg", category: "connection", w: 1144, h: 1600 },
     { file: "DSCF3532.jpeg", category: "wanderlust", w: 1066, h: 1600 },
@@ -338,37 +343,38 @@
     { file: "DSCF4084.jpeg", category: "wanderlust", w: 1066, h: 1600 },
     { file: "DSCF4121.jpeg", category: "wanderlust", w: 1600, h: 1066 },
     { file: "DSCF4232.jpeg", category: "wanderlust", w: 1066, h: 1600 },
-    { file: "DSCF5572.jpeg", category: "coastal", w: 1600, h: 1066 },
+    { file: "DSC_2671.jpeg", category: "connection", w: 1006, h: 1600 },
     { file: "DSCF4977.jpeg", category: "golden", w: 1066, h: 1600 },
+    { file: "DSC_2685.jpeg", category: "wanderlust", w: 1066, h: 1600 },
     { file: "DSCF6504.jpeg", category: "coastal", w: 1600, h: 1066 },
     { file: "DSC_1532.jpeg", category: "golden", w: 1067, h: 1600 },
-    { file: "DSCF5065.jpeg", category: "connection", w: 1066, h: 1600 },
+    { file: "DSCF5572.jpeg", category: "coastal", w: 1600, h: 1066 },
+    { file: "DSCF6531.jpeg", category: "coastal", w: 1600, h: 1066 },
     { file: "DSC_9977.jpeg", category: "coastal", w: 1067, h: 1600 },
+    { file: "DSCF5065.jpeg", category: "connection", w: 1066, h: 1600 },
     { file: "DSCF5036.jpeg", category: "wanderlust", w: 1600, h: 1066 },
     { file: "DSCF1206.jpeg", category: "wanderlust", w: 1600, h: 1066 },
     { file: "DSCF5295.jpeg", category: "coastal", w: 1600, h: 1066 },
-    { file: "DSCF5879.jpeg", category: "connection", w: 1600, h: 1066 },
     { file: "DSCF5639.jpeg", category: "coastal", w: 1600, h: 1066 },
     { file: "DSCF4539.jpeg", category: "wanderlust", w: 1600, h: 1066 },
+    { file: "DSCF5879.jpeg", category: "connection", w: 1600, h: 1066 },
+    { file: "DSC_2626.jpeg", category: "connection", w: 1600, h: 1066 },
+    { file: "DSCF7245.jpeg", category: "coastal", w: 1066, h: 1600 },
     { file: "DSCF8118.jpeg", category: "wild", w: 1600, h: 1067 },
     { file: "DSCF6265.jpeg", category: "wild", w: 1600, h: 1066 },
-    { file: "DSC_2671.jpeg", category: "connection", w: 1006, h: 1600 },
-    { file: "DSCF7245.jpeg", category: "coastal", w: 1066, h: 1600 },
     { file: "DSCF6488.jpeg", category: "coastal", w: 1600, h: 1066 },
     { file: "DSCF6361.jpeg", category: "wanderlust", w: 1066, h: 1600 },
     { file: "DSC_8999.jpeg", category: "wanderlust", w: 1066, h: 1600 },
     { file: "DSCF5067.jpeg", category: "coastal", w: 1600, h: 1066 },
     { file: "DSC_3259.jpeg", category: "connection", w: 1066, h: 1600 },
-    { file: "DSC_2626.jpeg", category: "connection", w: 1600, h: 1066 },
-    { file: "DSCF6531.jpeg", category: "coastal", w: 1600, h: 1066 },
     { file: "DSCF6558.jpeg", category: "coastal", w: 1600, h: 1066 },
-    { file: "DSCF6599.jpeg", category: "golden", w: 1600, h: 1066 },
+    { file: "DSC_2751.jpeg", category: "wanderlust", w: 1066, h: 1600 },
     { file: "DSC_5815.jpeg", category: "connection", w: 1066, h: 1600 },
     { file: "IMG_9952.jpeg", category: "wild", w: 1200, h: 1600 },
+    { file: "DSCF6599.jpeg", category: "golden", w: 1600, h: 1066 },
     { file: "DSCF6660.jpeg", category: "coastal", w: 1600, h: 1066 },
     { file: "DSCF2280.jpeg", category: "connection", w: 1600, h: 1066 },
     { file: "IMG_1152.jpeg", category: "wild", w: 1200, h: 1600 },
-    { file: "DSC_2705.jpeg", category: "connection", w: 1066, h: 1600 },
     { file: "DSCF7590.jpeg", category: "coastal", w: 1600, h: 1066 },
     { file: "DSC_7393.jpeg", category: "coastal", w: 1066, h: 1599 },
     { file: "DSCF4135.jpeg", category: "wild", w: 1600, h: 1066 },
@@ -386,9 +392,7 @@
     { file: "DSC_0948.jpeg", category: "wild", w: 1066, h: 1600 },
     { file: "DSC_0968.jpeg", category: "wild", w: 1600, h: 1066 },
     { file: "DSC_1420.jpeg", category: "coastal", w: 1066, h: 1600 },
-    { file: "DSC_2685.jpeg", category: "wanderlust", w: 1066, h: 1600 },
     { file: "DSC_3527.jpeg", category: "coastal", w: 1066, h: 1600 },
-    { file: "DSC_2751.jpeg", category: "wanderlust", w: 1066, h: 1600 },
     { file: "DSC_2959.jpeg", category: "coastal", w: 1066, h: 1600 },
     { file: "DSC_4479.jpeg", category: "wild", w: 1600, h: 1066 },
     { file: "DSC_5335.jpeg", category: "wanderlust", w: 1066, h: 1600 },
