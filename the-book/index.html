@@ -524,7 +524,10 @@
       });
     }
 
-    history.replaceState(null, '', '#' + (subSlug || slug));
+    // Safari treats a locally-opened (file://) page as having no real
+    // origin, and throws on history.replaceState there — wrapped so that
+    // quirk never breaks the actual chapter switch happening above.
+    try { history.replaceState(null, '', '#' + (subSlug || slug)); } catch (err) { /* ignore */ }
 
     if (subSlug){
       const subEl = document.getElementById(subSlug);
