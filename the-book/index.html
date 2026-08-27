@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>The Book — Lorena Oliveira</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#000000;
+    --paper:#ffffff;
+    --line:#e5e5e5;
+    --muted:#8c8c8c;
+    --panel:#f2f2f2;
+    --gap: clamp(24px, 6vw, 88px);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth; position:relative; width:100%; max-width:100%; overflow-x:hidden; overflow-x:clip;}
+  body{
+    margin:0;
+    position:relative;
+    width:100%;
+    max-width:100%;
+    overflow-x:hidden;
+    overflow-x:clip;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Inter', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif;
+    font-weight:300;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit; text-decoration:none;}
+  img{display:block; max-width:100%;}
+
+  .placeholder img{
+    -webkit-user-drag:none; user-select:none; -webkit-touch-callout:none;
+    pointer-events:none;
+  }
+
+  /* ---------- Top bar ---------- */
+  header.book-nav{
+    padding: 56px var(--gap) 20px;
+    text-align:center;
+  }
+  header.book-nav .back{
+    display:block;
+    font-size:11px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--muted);
+    margin-bottom:22px;
+  }
+  header.book-nav .back:hover{color:var(--ink);}
+  header.book-nav h1{
+    font-size:15px;
+    font-weight:400;
+    letter-spacing:0.2em;
+    text-transform:uppercase;
+    margin:0 0 10px;
+  }
+  header.book-nav p{
+    font-size:13px;
+    color:var(--muted);
+    max-width:56ch;
+    margin:0 auto;
+    line-height:1.7;
+  }
+  header.book-nav p.private{
+    margin-top:14px;
+    font-size:10px;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    color:var(--muted);
+    opacity:.7;
+  }
+
+  /* ---------- Table of contents ---------- */
+  .toc{
+    max-width:640px;
+    margin: 40px auto 90px;
+    padding: 0 var(--gap);
+  }
+  .toc .part-block{ margin-bottom:34px; }
+  .toc .part-block:last-child{ margin-bottom:0; }
+  .toc .part-label{
+    font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--muted);
+    margin: 0 0 10px 4px;
+  }
+  .toc .part-label a{ color:var(--ink); }
+  .toc .part-label a:hover{ color:var(--muted); }
+  .toc ol{
+    list-style:none;
+    margin:0; padding:0;
+    counter-reset:toc;
+    border-top:1px solid var(--line);
+  }
+  .toc ol > li{
+    counter-increment: toc;
+    border-bottom:1px solid var(--line);
+  }
+  .toc ol > li > a{
+    display:flex;
+    align-items:baseline;
+    gap:16px;
+    padding:14px 4px;
+    font-size:14px;
+  }
+  .toc ol > li > a::before{
+    content: counter(toc, decimal-leading-zero);
+    font-size:11px;
+    color:var(--muted);
+    letter-spacing:.06em;
+  }
+  .toc ol > li > a:hover{color:var(--muted);}
+  .toc .toc-sub{
+    list-style:none; margin: 0 0 6px 20px; padding:0;
+  }
+  .toc .toc-sub li{ border:0; }
+  .toc .toc-sub li a{
+    display:flex; align-items:baseline; gap:10px;
+    padding: 7px 4px; font-size:12px; color:var(--muted);
+  }
+  .toc .toc-sub li a::before{ content:"–"; font-size:11px; }
+  .toc .toc-sub li a:hover{ color:var(--ink); }
+  .toc .coming{
+    margin-top:14px;
+    padding:0 4px;
+    font-size:13px;
+    color:var(--muted);
+    font-style:italic;
+  }
+
+  /* ---------- Chapter sections ---------- */
+  section.chapter{
+    padding: 90px var(--gap) 10px;
+    border-top:1px solid var(--line);
+  }
+  section.chapter:first-of-type{ border-top:0; }
+  .chapter-head{
+    max-width:640px;
+    margin: 0 auto 46px;
+    text-align:center;
+  }
+  .chapter-head .eyebrow{
+    font-size:11px; letter-spacing:.16em; text-transform:uppercase; color:var(--muted);
+    margin-bottom:14px;
+  }
+  .chapter-head h2{
+    font-size: clamp(22px, 3.4vw, 32px);
+    font-weight:400;
+    margin:0 0 6px;
+  }
+  .chapter-head h3{
+    font-size:14px;
+    font-weight:300;
+    font-style:italic;
+    color:var(--muted);
+    margin:0 0 22px;
+  }
+  .chapter-head .note{
+    font-size:14px;
+    line-height:1.8;
+    color:var(--ink);
+    max-width:56ch;
+    margin:0 auto;
+  }
+
+  /* ---------- Subsections within a chapter (e.g. México's three parts) ---------- */
+  .subsection{
+    padding-top: 64px;
+    margin-top: 64px;
+    border-top: 1px solid var(--line);
+  }
+  .subsection:first-of-type{ padding-top:0; margin-top:20px; border-top:0; }
+  .subsection-head{
+    max-width:600px;
+    margin: 0 auto 36px;
+    text-align:center;
+  }
+  .subsection-head .sub-eyebrow{
+    font-size:10px; letter-spacing:.14em; text-transform:uppercase; color:var(--muted);
+    margin-bottom:10px;
+  }
+  .subsection-head h3.sub-title{
+    font-size:18px;
+    font-weight:400;
+    margin:0 0 6px;
+  }
+  .subsection-head .sub-title-en{
+    font-size:13px;
+    font-style:italic;
+    color:var(--muted);
+    margin:0 0 14px;
+  }
+  .subsection-head .sub-note{
+    font-size:13px;
+    line-height:1.7;
+    color:var(--muted);
+    max-width:52ch;
+    margin:0 auto;
+  }
+
+  /* ---------- Photo essay (stacked, one photo + caption at a time) ----------
+     A masonry grid works for a style-based portfolio, but crowds out room
+     for a real caption under each frame. Chapters here read top-to-bottom
+     instead, like a photo essay: full photo, then its description, then
+     the next one — so editors and readers can follow the story in order. */
+  .photo-essay{
+    max-width: 760px;
+    margin: 0 auto 10px;
+    display:flex;
+    flex-direction:column;
+    gap: 64px;
+  }
+  .photo-block .placeholder{
+    position:relative;
+    width:100%;
+    background: var(--panel);
+    display:flex; align-items:center; justify-content:center;
+    overflow:hidden;
+    min-height:60px;
+    cursor:zoom-in;
+  }
+  .photo-block .placeholder:hover{opacity:.9;}
+  .photo-block .placeholder img{
+    position:static;
+    width:100%;
+    height:auto;
+    object-fit:initial;
+  }
+  .photo-block .placeholder .label{
+    font-size:10px; letter-spacing:.14em; text-transform:uppercase;
+    color:var(--muted);
+    text-align:center; padding:20px;
+  }
+  .photo-block .placeholder.has-image .label{display:none;}
+  .photo-block figcaption{
+    margin-top:16px;
+    font-size:14px;
+    line-height:1.75;
+    color:var(--ink);
+    font-weight:300;
+  }
+  .photo-block figcaption.placeholder-caption{
+    color:var(--muted);
+    font-style:italic;
+    font-size:13px;
+  }
+
+  .empty-grid{
+    max-width:640px;
+    margin: 0 auto 20px;
+    padding: 30px var(--gap);
+    text-align:center;
+    font-size:12px;
+    letter-spacing:.06em;
+    color:var(--muted);
+    border:1px dashed var(--line);
+    border-radius:4px;
+  }
+
+  footer{
+    padding:60px var(--gap) 70px;
+    text-align:center;
+    font-size:10px; letter-spacing:.08em; color:var(--muted);
+  }
+
+  /* ---------- Lightbox ---------- */
+  .lightbox{
+    position:fixed; inset:0; background:rgba(10,10,10,.96); z-index:200;
+    display:none; align-items:center; justify-content:center; padding:40px;
+  }
+  .lightbox.open{display:flex;}
+  .lightbox .placeholder{
+    width:auto; height:auto; max-width:92vw; max-height:88vh;
+    background:none;
+  }
+  .lightbox .placeholder img{
+    position:static;
+    width:auto; height:auto;
+    max-width:92vw; max-height:88vh;
+    object-fit:contain;
+    margin:0 auto;
+  }
+  .lightbox .close{
+    position:absolute; top:26px; right:var(--gap);
+    color:#fff; font-size:12px; letter-spacing:.14em; text-transform:uppercase;
+    background:none; border:0; cursor:pointer;
+  }
+
+  @media (max-width:640px){
+    :root{ --gap: 20px; }
+    header.book-nav{padding:44px var(--gap) 16px;}
+    section.chapter{padding:64px var(--gap) 6px;}
+    .photo-essay{gap:44px;}
+    .subsection{padding-top:48px; margin-top:48px;}
+  }
+</style>
+</head>
+<body>
+
+<header class="book-nav">
+  <a class="back" href="../index.html">← Lorena Oliveira</a>
+  <h1>The Book</h1>
+  <p>A photography preview of the memoir, chapter by chapter — for editorial review alongside the manuscript. Every scene in these chapters was lived and shot as it happened.</p>
+  <p class="private">Not linked from the main site — shared by direct link only</p>
+</header>
+
+<nav class="toc" aria-label="Chapters"></nav>
+
+<main id="chapters"></main>
+
+<footer>
+  <span>&copy; 2026 Lorena Oliveira — editorial preview, not for public distribution.</span>
+</footer>
+
+<div class="lightbox" id="lightbox">
+  <button class="close" id="lightboxClose">Close ✕</button>
+  <div class="placeholder"><div class="label">Preview</div></div>
+</div>
+
+<script>
+  // ============================================================
+  // CHAPTERS — one entry per chapter of the book, in reading order,
+  // grouped under `part` (the table of contents and section eyebrows
+  // follow that grouping automatically).
+  //
+  // Two shapes of entry:
+  //
+  //   A) Flat chapter — just a `photos` array. Photos + captions go
+  //      straight under the chapter heading, no further breakdown.
+  //        { part, slug, title, titleEN, note, photos: [...] }
+  //
+  //   B) Chapter with subsections — used for México, which has three
+  //      distinct parts (Mexico City / Sayulita / Chiapas). Each
+  //      subsection gets its own heading and its own photos array.
+  //        { part, slug, title, titleEN, note,
+  //          subsections: [ { slug, title, titleEN, note, photos }, ... ] }
+  //
+  // To ADD A PHOTO (to a flat chapter's `photos`, or a subsection's
+  // `photos` — same shape either way): drop the file into
+  // the-book/photos/, then add a line:
+  //   { file: "yourfile.jpg", w: 1600, h: 1066, caption: "..." }
+  //   - w/h are the image's real pixel dimensions (Preview.app's
+  //     Tools > Show Inspector, or Get Info in Finder).
+  //   - caption is the description that appears directly beneath
+  //     that photo. Leave it as "" and the photo still shows, just
+  //     with "No description added yet" under it as a reminder.
+  //
+  // To ADD A NEW CHAPTER: copy a flat-chapter block above and fill
+  // it in — it gets its own table-of-contents entry and section
+  // automatically, in whatever order you place it in the array.
+  // ============================================================
+  const CHAPTERS = [
+    // Primeira Parte isn't broken out chapter-by-chapter here — just
+    // add photos (with captions) as you have them, in whatever order
+    // you want them to read.
+    { part: "Primeira Parte", slug: "primeira-parte", title: "Primeira Parte", titleEN: "", note: "", photos: [
+      // { file: "example.jpg", w: 1600, h: 1066, caption: "..." },
+    ] },
+
+    // ---------------- SEGUNDA PARTE — NÔMADE DIGITAL ----------------
+    {
+      part: "Segunda Parte — Nômade Digital",
+      slug: "mexico",
+      title: "México",
+      titleEN: "",
+      note: "Mexico City, Sayulita, and Chiapas — the chapter where the rebirth after the divorce begins.",
+      subsections: [
+        {
+          slug: "mexico-tudo-parece-diferente-agora",
+          title: "Tudo Parece Diferente Agora",
+          titleEN: "",
+          note: "Mexico City — dating-app immersion, new friendships, first steps back into her own life.",
+          photos: [
+            // { file: "example.jpg", w: 1600, h: 1066, caption: "..." },
+          ]
+        },
+        {
+          slug: "mexico-aprendendo-a-aceitar-a-beleza-do-imperfeito",
+          title: "Aprendendo a Aceitar a Beleza do Imperfeito",
+          titleEN: "",
+          note: "Sayulita — the hostel, the mural, the beach ceremony, a new therapist.",
+          photos: []
+        },
+        {
+          slug: "mexico-a-possibilidade-de-viver-sem-amarras",
+          title: "A Possibilidade de Viver Sem Amarras",
+          titleEN: "",
+          note: "Chiapas — San Cristóbal de las Casas, Agua Azul, Palenque, El Chiflón.",
+          photos: []
+        }
+      ]
+    },
+    { part: "Segunda Parte — Nômade Digital", slug: "colombia", title: "Colômbia", titleEN: "", note: "", photos: [] },
+    { part: "Segunda Parte — Nômade Digital", slug: "peru", title: "Peru", titleEN: "", note: "", photos: [] },
+    { part: "Segunda Parte — Nômade Digital", slug: "argentina", title: "Argentina", titleEN: "", note: "", photos: [] },
+    { part: "Segunda Parte — Nômade Digital", slug: "brasil", title: "Brasil", titleEN: "", note: "", photos: [] },
+    // More countries/chapters can be added here as they're drafted —
+    // just copy a block above and change part/slug/title/note/photos.
+  ];
+
+  const chaptersEl = document.getElementById('chapters');
+  const tocEl = document.querySelector('.toc');
+  const lightbox = document.getElementById('lightbox');
+  const lightboxInner = lightbox.querySelector('.placeholder');
+
+  function openLightbox(innerHTML){
+    lightboxInner.innerHTML = innerHTML;
+    lightbox.classList.add('open');
+  }
+
+  function photosEssayHTML(photos, emptyLabel){
+    if (!photos.length){
+      return `<div class="empty-grid">${emptyLabel} haven't been added yet — see the instructions in the CHAPTERS list at the top of this page's source.</div>`;
+    }
+    return `<div class="photo-essay">` + photos.map(p => `
+      <figure class="photo-block">
+        <div class="placeholder">
+          <div class="label">${p.file}</div>
+          <img src="photos/${p.file}" alt="${(p.caption || '').replace(/"/g, '&quot;')}" width="${p.w}" height="${p.h}" loading="lazy"
+               onerror="this.style.display='none'"
+               onload="this.parentElement.classList.add('has-image')">
+        </div>
+        ${p.caption
+          ? `<figcaption>${p.caption}</figcaption>`
+          : `<figcaption class="placeholder-caption">No description added yet</figcaption>`}
+      </figure>`).join('') + `</div>`;
+  }
+
+  // ---------- Table of contents, grouped by `part` in order of first appearance ----------
+  const parts = [];
+  CHAPTERS.forEach(ch => { if (!parts.includes(ch.part)) parts.push(ch.part); });
+  parts.forEach(partName => {
+    const chaptersInPart = CHAPTERS.filter(ch => ch.part === partName);
+    const block = document.createElement('div');
+    block.className = 'part-block';
+    const label = document.createElement('div');
+    label.className = 'part-label';
+
+    if (chaptersInPart.length === 1 && chaptersInPart[0].title === partName){
+      // A part with a single, self-titled chapter (Primeira Parte, for
+      // now) reads as one link rather than a label plus a redundant list.
+      label.innerHTML = `<a href="#${chaptersInPart[0].slug}">${partName}</a>`;
+      block.appendChild(label);
+    } else {
+      label.textContent = partName;
+      block.appendChild(label);
+      const ol = document.createElement('ol');
+      chaptersInPart.forEach(ch => {
+        const li = document.createElement('li');
+        li.innerHTML = `<a href="#${ch.slug}">${ch.title}</a>`;
+        if (ch.subsections){
+          const sub = document.createElement('ul');
+          sub.className = 'toc-sub';
+          ch.subsections.forEach(s => {
+            const subLi = document.createElement('li');
+            subLi.innerHTML = `<a href="#${s.slug}">${s.title}</a>`;
+            sub.appendChild(subLi);
+          });
+          li.appendChild(sub);
+        }
+        ol.appendChild(li);
+      });
+      block.appendChild(ol);
+    }
+    tocEl.appendChild(block);
+  });
+  const comingNote = document.createElement('p');
+  comingNote.className = 'coming';
+  comingNote.textContent = 'More chapters will appear here as each is finalized — just add an entry to CHAPTERS in this page’s source.';
+  tocEl.appendChild(comingNote);
+
+  // ---------- Chapter sections ----------
+  CHAPTERS.forEach(ch => {
+    const section = document.createElement('section');
+    section.className = 'chapter';
+    section.id = ch.slug;
+
+    const bodyHTML = ch.subsections
+      ? ch.subsections.map(sub => `
+        <div class="subsection" id="${sub.slug}">
+          <div class="subsection-head">
+            <div class="sub-eyebrow">${ch.title}</div>
+            <h3 class="sub-title">${sub.title}</h3>
+            ${sub.titleEN ? `<p class="sub-title-en">${sub.titleEN}</p>` : ''}
+            ${sub.note ? `<p class="sub-note">${sub.note}</p>` : ''}
+          </div>
+          ${photosEssayHTML(sub.photos, 'Photos for this section')}
+        </div>`).join('')
+      : photosEssayHTML(ch.photos, 'Photos for this chapter');
+
+    section.innerHTML = `
+      <div class="chapter-head">
+        <div class="eyebrow">${ch.part}</div>
+        <h2>${ch.title}</h2>
+        ${ch.titleEN ? `<h3>${ch.titleEN}</h3>` : ''}
+        ${ch.note ? `<p class="note">${ch.note}</p>` : ''}
+      </div>
+      ${bodyHTML}
+    `;
+    chaptersEl.appendChild(section);
+
+    section.querySelectorAll('.photo-block .placeholder').forEach(el => {
+      el.addEventListener('click', () => openLightbox(el.innerHTML));
+    });
+  });
+
+  document.getElementById('lightboxClose').addEventListener('click', () => lightbox.classList.remove('open'));
+  lightbox.addEventListener('click', (e) => { if (e.target === lightbox) lightbox.classList.remove('open'); });
+</script>
+
+</body>
+</html>
