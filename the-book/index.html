@@ -68,19 +68,13 @@
     margin:0 auto;
     line-height:1.7;
   }
-  header.book-nav p.private{
-    margin-top:14px;
-    font-size:10px;
-    letter-spacing:.1em;
-    text-transform:uppercase;
-    color:var(--muted);
-    opacity:.7;
-  }
 
-  /* ---------- Table of contents ---------- */
+  /* ---------- Table of contents (persistent nav, not an anchor-scroll list —
+     clicking a chapter switches the visible section instantly, the same way
+     the portfolio's Work/About/Contact nav and category filters do) ---------- */
   .toc{
     max-width:640px;
-    margin: 40px auto 90px;
+    margin: 40px auto 70px;
     padding: 0 var(--gap);
   }
   .toc .part-block{ margin-bottom:34px; }
@@ -91,6 +85,7 @@
   }
   .toc .part-label a{ color:var(--ink); }
   .toc .part-label a:hover{ color:var(--muted); }
+  .toc .part-label a.active{ color:var(--muted); }
   .toc ol{
     list-style:none;
     margin:0; padding:0;
@@ -115,6 +110,7 @@
     letter-spacing:.06em;
   }
   .toc ol > li > a:hover{color:var(--muted);}
+  .toc ol > li > a.active{color:var(--muted);}
   .toc .toc-sub{
     list-style:none; margin: 0 0 6px 20px; padding:0;
   }
@@ -125,20 +121,18 @@
   }
   .toc .toc-sub li a::before{ content:"–"; font-size:11px; }
   .toc .toc-sub li a:hover{ color:var(--ink); }
-  .toc .coming{
-    margin-top:14px;
-    padding:0 4px;
-    font-size:13px;
-    color:var(--muted);
-    font-style:italic;
-  }
+  .toc .toc-sub li a.active{ color:var(--ink); font-weight:400; }
 
-  /* ---------- Chapter sections ---------- */
+  /* ---------- Chapter sections ----------
+     Only one is visible at a time — the rest stay out of the layout
+     entirely (display:none), and each chapter's photos aren't even
+     built into the page until the first time it's opened, so opening
+     one country never has to load or render every other country's
+     images. */
+  .chapter:not(.active){ display:none !important; }
   section.chapter{
-    padding: 90px var(--gap) 10px;
-    border-top:1px solid var(--line);
+    padding: 20px var(--gap) 10px;
   }
-  section.chapter:first-of-type{ border-top:0; }
   .chapter-head{
     max-width:640px;
     margin: 0 auto 46px;
@@ -187,20 +181,20 @@
   .subsection-head h3.sub-title{
     font-size:18px;
     font-weight:400;
-    margin:0 0 6px;
+    margin:0;
   }
   .subsection-head .sub-title-en{
     font-size:13px;
     font-style:italic;
     color:var(--muted);
-    margin:0 0 14px;
+    margin:6px 0 0;
   }
   .subsection-head .sub-note{
     font-size:13px;
     line-height:1.7;
     color:var(--muted);
     max-width:52ch;
-    margin:0 auto;
+    margin:14px auto 0;
   }
 
   /* ---------- Photo essay (stacked, one photo + caption at a time) ----------
@@ -294,7 +288,7 @@
   @media (max-width:640px){
     :root{ --gap: 20px; }
     header.book-nav{padding:44px var(--gap) 16px;}
-    section.chapter{padding:64px var(--gap) 6px;}
+    section.chapter{padding:10px var(--gap) 6px;}
     .photo-essay{gap:44px;}
     .subsection{padding-top:48px; margin-top:48px;}
   }
@@ -306,7 +300,6 @@
   <a class="back" href="../index.html">← Lorena Oliveira</a>
   <h1>The Book</h1>
   <p>A photography preview of the memoir, chapter by chapter — for editorial review alongside the manuscript. Every scene in these chapters was lived and shot as it happened.</p>
-  <p class="private">Not linked from the main site — shared by direct link only</p>
 </header>
 
 <nav class="toc" aria-label="Chapters"></nav>
@@ -326,7 +319,12 @@
   // ============================================================
   // CHAPTERS — one entry per chapter of the book, in reading order,
   // grouped under `part` (the table of contents and section eyebrows
-  // follow that grouping automatically).
+  // follow that grouping automatically). Clicking a chapter in the
+  // table of contents switches straight to it — like the portfolio's
+  // Work/About/Contact nav — instead of scrolling down one long page,
+  // and a chapter's photos aren't built into the page until the first
+  // time you open it, so opening one country never loads every other
+  // country's images along with it.
   //
   // Two shapes of entry:
   //
@@ -353,6 +351,10 @@
   // To ADD A NEW CHAPTER: copy a flat-chapter block above and fill
   // it in — it gets its own table-of-contents entry and section
   // automatically, in whatever order you place it in the array.
+  //
+  // `note` (on a chapter or a subsection) is optional descriptive
+  // text shown under its title — currently left blank everywhere on
+  // purpose; fill one in any time you want that bit of context back.
   // ============================================================
   const CHAPTERS = [
     // Primeira Parte isn't broken out chapter-by-chapter here — just
@@ -368,13 +370,13 @@
       slug: "mexico",
       title: "México",
       titleEN: "",
-      note: "Mexico City, Sayulita, and Chiapas — the chapter where the rebirth after the divorce begins.",
+      note: "",
       subsections: [
         {
           slug: "mexico-tudo-parece-diferente-agora",
           title: "Tudo Parece Diferente Agora",
           titleEN: "",
-          note: "Mexico City — dating-app immersion, new friendships, first steps back into her own life.",
+          note: "",
           photos: [
             // { file: "example.jpg", w: 1600, h: 1066, caption: "..." },
           ]
@@ -383,14 +385,14 @@
           slug: "mexico-aprendendo-a-aceitar-a-beleza-do-imperfeito",
           title: "Aprendendo a Aceitar a Beleza do Imperfeito",
           titleEN: "",
-          note: "Sayulita — the hostel, the mural, the beach ceremony, a new therapist.",
+          note: "",
           photos: []
         },
         {
           slug: "mexico-a-possibilidade-de-viver-sem-amarras",
           title: "A Possibilidade de Viver Sem Amarras",
           titleEN: "",
-          note: "Chiapas — San Cristóbal de las Casas, Agua Azul, Palenque, El Chiflón.",
+          note: "",
           photos: []
         }
       ]
@@ -431,6 +433,39 @@
       </figure>`).join('') + `</div>`;
   }
 
+  function chapterBodyHTML(ch){
+    return ch.subsections
+      ? ch.subsections.map(sub => `
+        <div class="subsection" id="${sub.slug}">
+          <div class="subsection-head">
+            <div class="sub-eyebrow">${ch.title}</div>
+            <h3 class="sub-title">${sub.title}</h3>
+            ${sub.titleEN ? `<p class="sub-title-en">${sub.titleEN}</p>` : ''}
+            ${sub.note ? `<p class="sub-note">${sub.note}</p>` : ''}
+          </div>
+          ${photosEssayHTML(sub.photos, 'Photos for this section')}
+        </div>`).join('')
+      : photosEssayHTML(ch.photos, 'Photos for this chapter');
+  }
+
+  // ---------- Build the (empty-bodied) chapter shells up front; each
+  // body is filled in lazily, the first time that chapter is opened. ----------
+  CHAPTERS.forEach(ch => {
+    const section = document.createElement('section');
+    section.className = 'chapter';
+    section.id = ch.slug;
+    section.innerHTML = `
+      <div class="chapter-head">
+        <div class="eyebrow">${ch.part}</div>
+        <h2>${ch.title}</h2>
+        ${ch.titleEN ? `<h3>${ch.titleEN}</h3>` : ''}
+        ${ch.note ? `<p class="note">${ch.note}</p>` : ''}
+      </div>
+      <div class="chapter-body"></div>
+    `;
+    chaptersEl.appendChild(section);
+  });
+
   // ---------- Table of contents, grouped by `part` in order of first appearance ----------
   const parts = [];
   CHAPTERS.forEach(ch => { if (!parts.includes(ch.part)) parts.push(ch.part); });
@@ -444,7 +479,7 @@
     if (chaptersInPart.length === 1 && chaptersInPart[0].title === partName){
       // A part with a single, self-titled chapter (Primeira Parte, for
       // now) reads as one link rather than a label plus a redundant list.
-      label.innerHTML = `<a href="#${chaptersInPart[0].slug}">${partName}</a>`;
+      label.innerHTML = `<a href="#${chaptersInPart[0].slug}" data-slug="${chaptersInPart[0].slug}">${partName}</a>`;
       block.appendChild(label);
     } else {
       label.textContent = partName;
@@ -452,13 +487,13 @@
       const ol = document.createElement('ol');
       chaptersInPart.forEach(ch => {
         const li = document.createElement('li');
-        li.innerHTML = `<a href="#${ch.slug}">${ch.title}</a>`;
+        li.innerHTML = `<a href="#${ch.slug}" data-slug="${ch.slug}">${ch.title}</a>`;
         if (ch.subsections){
           const sub = document.createElement('ul');
           sub.className = 'toc-sub';
           ch.subsections.forEach(s => {
             const subLi = document.createElement('li');
-            subLi.innerHTML = `<a href="#${s.slug}">${s.title}</a>`;
+            subLi.innerHTML = `<a href="#${s.slug}" data-slug="${ch.slug}" data-sub="${s.slug}">${s.title}</a>`;
             sub.appendChild(subLi);
           });
           li.appendChild(sub);
@@ -469,45 +504,60 @@
     }
     tocEl.appendChild(block);
   });
-  const comingNote = document.createElement('p');
-  comingNote.className = 'coming';
-  comingNote.textContent = 'More chapters will appear here as each is finalized — just add an entry to CHAPTERS in this page’s source.';
-  tocEl.appendChild(comingNote);
 
-  // ---------- Chapter sections ----------
-  CHAPTERS.forEach(ch => {
-    const section = document.createElement('section');
-    section.className = 'chapter';
-    section.id = ch.slug;
+  // ---------- Switching chapters ----------
+  const tocLinks = document.querySelectorAll('.toc a[data-slug]');
 
-    const bodyHTML = ch.subsections
-      ? ch.subsections.map(sub => `
-        <div class="subsection" id="${sub.slug}">
-          <div class="subsection-head">
-            <div class="sub-eyebrow">${ch.title}</div>
-            <h3 class="sub-title">${sub.title}</h3>
-            ${sub.titleEN ? `<p class="sub-title-en">${sub.titleEN}</p>` : ''}
-            ${sub.note ? `<p class="sub-note">${sub.note}</p>` : ''}
-          </div>
-          ${photosEssayHTML(sub.photos, 'Photos for this section')}
-        </div>`).join('')
-      : photosEssayHTML(ch.photos, 'Photos for this chapter');
+  function showChapter(slug, subSlug){
+    const ch = CHAPTERS.find(c => c.slug === slug);
+    if (!ch) return;
 
-    section.innerHTML = `
-      <div class="chapter-head">
-        <div class="eyebrow">${ch.part}</div>
-        <h2>${ch.title}</h2>
-        ${ch.titleEN ? `<h3>${ch.titleEN}</h3>` : ''}
-        ${ch.note ? `<p class="note">${ch.note}</p>` : ''}
-      </div>
-      ${bodyHTML}
-    `;
-    chaptersEl.appendChild(section);
+    document.querySelectorAll('.chapter').forEach(sec => sec.classList.toggle('active', sec.id === slug));
+    tocLinks.forEach(a => a.classList.toggle('active', a.dataset.slug === slug && (!a.dataset.sub || a.dataset.sub === subSlug)));
 
-    section.querySelectorAll('.photo-block .placeholder').forEach(el => {
-      el.addEventListener('click', () => openLightbox(el.innerHTML));
+    const bodyEl = document.querySelector('#' + slug + ' .chapter-body');
+    if (bodyEl && !bodyEl.dataset.rendered){
+      bodyEl.innerHTML = chapterBodyHTML(ch);
+      bodyEl.dataset.rendered = 'true';
+      bodyEl.querySelectorAll('.photo-block .placeholder').forEach(el => {
+        el.addEventListener('click', () => openLightbox(el.innerHTML));
+      });
+    }
+
+    history.replaceState(null, '', '#' + (subSlug || slug));
+
+    if (subSlug){
+      const subEl = document.getElementById(subSlug);
+      if (subEl) subEl.scrollIntoView();
+    } else {
+      window.scrollTo(0, 0);
+    }
+  }
+
+  tocLinks.forEach(a => {
+    a.addEventListener('click', (e) => {
+      e.preventDefault();
+      showChapter(a.dataset.slug, a.dataset.sub || null);
     });
   });
+
+  // Deep-link support: opening the page with #mexico or
+  // #mexico-tudo-parece-diferente-agora in the URL jumps straight
+  // there — handy for sending an editor a link to just one chapter.
+  function chapterForHash(hash){
+    if (!hash) return null;
+    const bySlug = CHAPTERS.find(c => c.slug === hash);
+    if (bySlug) return { slug: bySlug.slug, subSlug: null };
+    for (const c of CHAPTERS){
+      if (c.subsections && c.subsections.some(s => s.slug === hash)){
+        return { slug: c.slug, subSlug: hash };
+      }
+    }
+    return null;
+  }
+
+  const initial = chapterForHash(location.hash.replace('#', '')) || { slug: CHAPTERS[0].slug, subSlug: null };
+  showChapter(initial.slug, initial.subSlug);
 
   document.getElementById('lightboxClose').addEventListener('click', () => lightbox.classList.remove('open'));
   lightbox.addEventListener('click', (e) => { if (e.target === lightbox) lightbox.classList.remove('open'); });
