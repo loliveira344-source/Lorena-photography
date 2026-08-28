@@ -135,6 +135,7 @@
   }
   .plate{
     width:100%;
+    margin:0;
     transition:opacity .3s ease;
   }
   .plate .placeholder{
@@ -439,7 +440,6 @@
     { file: "IMG_9394.jpeg", category: "wild", w: 1199, h: 1600 },
     { file: "IMG_7710.jpeg", category: "wanderlust", w: 1200, h: 1600 },
     { file: "DSC_2309.JPG", category: "golden", w: 1600, h: 1067 },
-        { file: "itago.jpg", category: "coastal", w: 1600, h: 1067 },
   ];
 
   const grid = document.getElementById('photoGrid');
@@ -462,7 +462,7 @@
   // holes a fixed round-robin can leave when one column's photos happen to
   // run shorter than the others.
   function columnCountForWidth(width){
-    if (width <= 340) return 1;
+    if (width <= 640) return 1;
     if (width <= 900) return 2;
     return 3;
   }
