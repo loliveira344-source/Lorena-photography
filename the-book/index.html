@@ -582,7 +582,6 @@
       ? `<figcaption>${p.caption}</figcaption>`
       : `<figcaption class="placeholder-caption">No description added yet</figcaption>`;
     lightboxInner.innerHTML = `
-        <div class="label">${p.file}</div>
         <img src="photos/${p.file}" alt="${(p.caption || '').replace(/"/g, '&quot;')}"
              onerror="this.style.display='none'"
              onload="this.parentElement.classList.add('has-image')">
