@@ -357,12 +357,151 @@
   // purpose; fill one in any time you want that bit of context back.
   // ============================================================
   const CHAPTERS = [
-    // Primeira Parte isn't broken out chapter-by-chapter here — just
-    // add photos (with captions) as you have them, in whatever order
-    // you want them to read.
-    { part: "Primeira Parte", slug: "primeira-parte", title: "Primeira Parte", titleEN: "", note: "", photos: [
-      // { file: "example.jpg", w: 1600, h: 1066, caption: "..." },
-    ] },
+    {
+      part: "Primeira Parte",
+      slug: "primeira-parte",
+      title: "Primeira Parte",
+      titleEN: "",
+      note: "",
+      subsections: [
+        { slug: "primeira-parte-origens", title: "Origens", titleEN: "", note: "", photos: [
+          { file: "primeira-parte-origens/origens-01-yemenja.jpg", w: 786, h: 975, caption: "" },
+          { file: "primeira-parte-origens/origens-02-farm.jpg", w: 1200, h: 1600, caption: "" },
+          { file: "primeira-parte-origens/origens-03-farm.jpg", w: 1200, h: 1600, caption: "" },
+          { file: "primeira-parte-origens/origens-04-farm.jpg", w: 1200, h: 1600, caption: "" },
+          { file: "primeira-parte-origens/origens-05-tapioca.jpg", w: 1200, h: 1600, caption: "" },
+          { file: "primeira-parte-origens/origens-06-tapioca.jpg", w: 1200, h: 1600, caption: "" },
+          { file: "primeira-parte-origens/origens-07-tapioca.jpg", w: 1200, h: 1600, caption: "" },
+          { file: "primeira-parte-origens/origens-08-bar70.jpg", w: 1200, h: 1600, caption: "" },
+          { file: "primeira-parte-origens/origens-09.jpg", w: 786, h: 1183, caption: "" },
+          { file: "primeira-parte-origens/origens-10.jpg", w: 900, h: 1600, caption: "" },
+          { file: "primeira-parte-origens/origens-11.jpg", w: 1200, h: 1600, caption: "" },
+          { file: "primeira-parte-origens/origens-12.jpg", w: 1200, h: 1600, caption: "" },
+          { file: "primeira-parte-origens/origens-13-last-nye.jpg", w: 541, h: 720, caption: "" },
+        ] },
+        { slug: "primeira-parte-bastarda", title: "Bastarda", titleEN: "", note: "", photos: [
+          { file: "primeira-parte-bastarda/bastarda-01.jpg", w: 1600, h: 1094, caption: "" },
+        ] },
+        { slug: "primeira-parte-o-coelho-mau", title: "O Coelho Mau", titleEN: "", note: "", photos: [] },
+        { slug: "primeira-parte-estados-unidos", title: "Estados Unidos", titleEN: "", note: "", photos: [
+          { file: "primeira-parte-estados-unidos/estados-unidos-01.jpg", w: 1600, h: 1412, caption: "" },
+          { file: "primeira-parte-estados-unidos/estados-unidos-02.jpg", w: 1600, h: 1090, caption: "" },
+          { file: "primeira-parte-estados-unidos/estados-unidos-03.jpg", w: 1200, h: 1600, caption: "" },
+        ] },
+        { slug: "primeira-parte-meu-primeiro-amor", title: "Meu Primeiro Amor", titleEN: "", note: "", photos: [
+          { file: "primeira-parte-meu-primeiro-amor/highschool-01-clara.jpg", w: 1024, h: 768, caption: "" },
+          { file: "primeira-parte-meu-primeiro-amor/highschool-02-clara.jpg", w: 540, h: 720, caption: "" },
+          { file: "primeira-parte-meu-primeiro-amor/highschool-03-clara.jpg", w: 1024, h: 768, caption: "" },
+          { file: "primeira-parte-meu-primeiro-amor/highschool-04-clara.jpg", w: 900, h: 1600, caption: "" },
+          { file: "primeira-parte-meu-primeiro-amor/highschool-05-clara.jpg", w: 540, h: 720, caption: "" },
+          { file: "primeira-parte-meu-primeiro-amor/highschool-06.jpg", w: 900, h: 1600, caption: "" },
+          { file: "primeira-parte-meu-primeiro-amor/highschool-07.jpg", w: 900, h: 1600, caption: "" },
+          { file: "primeira-parte-meu-primeiro-amor/highschool-08.jpg", w: 720, h: 486, caption: "" },
+          { file: "primeira-parte-meu-primeiro-amor/highschool-09.jpg", w: 720, h: 540, caption: "" },
+        ] },
+        { slug: "primeira-parte-o-peso-da-responsabilidade", title: "O Peso da Responsabilidade", titleEN: "", note: "", photos: [
+          { file: "primeira-parte-o-peso-da-responsabilidade/peso-01-lifeguard.jpg", w: 720, h: 540, caption: "" },
+          { file: "primeira-parte-o-peso-da-responsabilidade/peso-02-waitress.jpg", w: 604, h: 453, caption: "" },
+        ] },
+        { slug: "primeira-parte-memorias-adormecidas", title: "Memórias Adormecidas", titleEN: "", note: "", photos: [
+          { file: "primeira-parte-memorias-adormecidas/childhood-tiago-01.jpg", w: 1600, h: 1200, caption: "" },
+          { file: "primeira-parte-memorias-adormecidas/de-volta-a-brazil-01.jpg", w: 960, h: 639, caption: "" },
+          { file: "primeira-parte-memorias-adormecidas/de-volta-a-brazil-02.jpg", w: 960, h: 639, caption: "" },
+          { file: "primeira-parte-memorias-adormecidas/de-volta-a-brazil-03.jpg", w: 960, h: 639, caption: "" },
+          { file: "primeira-parte-memorias-adormecidas/de-volta-a-brazil-04.jpg", w: 960, h: 639, caption: "" },
+          { file: "primeira-parte-memorias-adormecidas/de-volta-a-brazil-05.jpg", w: 960, h: 640, caption: "" },
+          { file: "primeira-parte-memorias-adormecidas/de-volta-a-brazil-06.jpg", w: 960, h: 639, caption: "" },
+          { file: "primeira-parte-memorias-adormecidas/de-volta-a-brazil-07.jpg", w: 960, h: 639, caption: "" },
+          { file: "primeira-parte-memorias-adormecidas/de-volta-a-brazil-08.jpg", w: 960, h: 639, caption: "" },
+          { file: "primeira-parte-memorias-adormecidas/de-volta-a-brazil-09.jpg", w: 1200, h: 1600, caption: "" },
+          { file: "primeira-parte-memorias-adormecidas/de-volta-a-brazil-10.jpg", w: 960, h: 639, caption: "" },
+          { file: "primeira-parte-memorias-adormecidas/de-volta-a-brazil-11.jpg", w: 639, h: 960, caption: "" },
+          { file: "primeira-parte-memorias-adormecidas/de-volta-a-brazil-12.jpg", w: 639, h: 960, caption: "" },
+          { file: "primeira-parte-memorias-adormecidas/de-volta-a-brazil-13.jpg", w: 960, h: 639, caption: "" },
+          { file: "primeira-parte-memorias-adormecidas/de-volta-a-brazil-14.jpg", w: 1200, h: 1600, caption: "" },
+          { file: "primeira-parte-memorias-adormecidas/de-volta-a-brazil-15.jpg", w: 960, h: 639, caption: "" },
+          { file: "primeira-parte-memorias-adormecidas/de-volta-a-brazil-16.jpg", w: 960, h: 639, caption: "" },
+          { file: "primeira-parte-memorias-adormecidas/de-volta-a-brazil-17.jpg", w: 960, h: 639, caption: "" },
+          { file: "primeira-parte-memorias-adormecidas/de-volta-a-brazil-18.jpg", w: 639, h: 960, caption: "" },
+          { file: "primeira-parte-memorias-adormecidas/de-volta-a-brazil-19.jpg", w: 1200, h: 1600, caption: "" },
+          { file: "primeira-parte-memorias-adormecidas/de-volta-a-brazil-20.jpg", w: 960, h: 639, caption: "" },
+          { file: "primeira-parte-memorias-adormecidas/de-volta-a-brazil-21.jpg", w: 960, h: 960, caption: "" },
+          { file: "primeira-parte-memorias-adormecidas/de-volta-a-brazil-22.jpg", w: 960, h: 639, caption: "" },
+          { file: "primeira-parte-memorias-adormecidas/de-volta-a-brazil-23.jpg", w: 960, h: 639, caption: "" },
+          { file: "primeira-parte-memorias-adormecidas/de-volta-a-brazil-24.jpg", w: 960, h: 639, caption: "" },
+          { file: "primeira-parte-memorias-adormecidas/de-volta-a-brazil-25.jpg", w: 960, h: 640, caption: "" },
+          { file: "primeira-parte-memorias-adormecidas/de-volta-a-brazil-26.jpg", w: 960, h: 639, caption: "" },
+          { file: "primeira-parte-memorias-adormecidas/de-volta-a-brazil-27.jpg", w: 924, h: 960, caption: "" },
+          { file: "primeira-parte-memorias-adormecidas/de-volta-a-brazil-28.jpg", w: 900, h: 1600, caption: "" },
+        ] },
+        { slug: "primeira-parte-quatro-dias", title: "Quatro Dias", titleEN: "", note: "", photos: [] },
+        { slug: "primeira-parte-a-conquista-de-um-sonho-americano", title: "A Conquista de um Sonho Americano", titleEN: "", note: "", photos: [
+          { file: "primeira-parte-a-conquista-de-um-sonho-americano/career-01.jpg", w: 864, h: 1296, caption: "" },
+          { file: "primeira-parte-a-conquista-de-um-sonho-americano/career-02.jpg", w: 1296, h: 864, caption: "" },
+          { file: "primeira-parte-a-conquista-de-um-sonho-americano/career-03.jpg", w: 1232, h: 821, caption: "" },
+          { file: "primeira-parte-a-conquista-de-um-sonho-americano/career-04.jpg", w: 1200, h: 1600, caption: "" },
+          { file: "primeira-parte-a-conquista-de-um-sonho-americano/career-05.jpg", w: 1067, h: 1600, caption: "" },
+          { file: "primeira-parte-a-conquista-de-um-sonho-americano/career-06.jpg", w: 1339, h: 1600, caption: "" },
+          { file: "primeira-parte-a-conquista-de-um-sonho-americano/career-07.jpg", w: 1600, h: 1200, caption: "" },
+          { file: "primeira-parte-a-conquista-de-um-sonho-americano/career-08.jpg", w: 1366, h: 768, caption: "" },
+          { file: "primeira-parte-a-conquista-de-um-sonho-americano/career-09.jpg", w: 1600, h: 1066, caption: "" },
+          { file: "primeira-parte-a-conquista-de-um-sonho-americano/career-10.jpg", w: 1600, h: 1067, caption: "" },
+          { file: "primeira-parte-a-conquista-de-um-sonho-americano/career-11.jpg", w: 1600, h: 1067, caption: "" },
+          { file: "primeira-parte-a-conquista-de-um-sonho-americano/career-12.jpg", w: 1600, h: 1067, caption: "" },
+          { file: "primeira-parte-a-conquista-de-um-sonho-americano/career-13.jpg", w: 1067, h: 1600, caption: "" },
+          { file: "primeira-parte-a-conquista-de-um-sonho-americano/career-14.jpg", w: 1067, h: 1600, caption: "" },
+          { file: "primeira-parte-a-conquista-de-um-sonho-americano/career-15.jpg", w: 1600, h: 1055, caption: "" },
+          { file: "primeira-parte-a-conquista-de-um-sonho-americano/career-16.jpg", w: 1600, h: 1066, caption: "" },
+          { file: "primeira-parte-a-conquista-de-um-sonho-americano/career-17.jpg", w: 1600, h: 1061, caption: "" },
+          { file: "primeira-parte-a-conquista-de-um-sonho-americano/career-18.jpg", w: 1144, h: 1600, caption: "" },
+          { file: "primeira-parte-a-conquista-de-um-sonho-americano/career-19.jpg", w: 1600, h: 1200, caption: "" },
+          { file: "primeira-parte-a-conquista-de-um-sonho-americano/career-20.jpg", w: 1366, h: 768, caption: "" },
+          { file: "primeira-parte-a-conquista-de-um-sonho-americano/career-21.jpg", w: 960, h: 1280, caption: "" },
+          { file: "primeira-parte-a-conquista-de-um-sonho-americano/career-22.jpg", w: 1200, h: 1600, caption: "" },
+          { file: "primeira-parte-a-conquista-de-um-sonho-americano/career-23.jpg", w: 1200, h: 1600, caption: "" },
+          { file: "primeira-parte-a-conquista-de-um-sonho-americano/career-24.jpg", w: 679, h: 1024, caption: "" },
+          { file: "primeira-parte-a-conquista-de-um-sonho-americano/career-25.jpg", w: 679, h: 1024, caption: "" },
+          { file: "primeira-parte-a-conquista-de-um-sonho-americano/career-26.jpg", w: 1280, h: 854, caption: "" },
+          { file: "primeira-parte-a-conquista-de-um-sonho-americano/career-27.jpg", w: 1280, h: 854, caption: "" },
+          { file: "primeira-parte-a-conquista-de-um-sonho-americano/career-28.jpg", w: 1280, h: 854, caption: "" },
+          { file: "primeira-parte-a-conquista-de-um-sonho-americano/career-29.jpg", w: 1600, h: 1200, caption: "" },
+          { file: "primeira-parte-a-conquista-de-um-sonho-americano/career-30.jpg", w: 1500, h: 1200, caption: "" },
+          { file: "primeira-parte-a-conquista-de-um-sonho-americano/career-31.jpg", w: 905, h: 1600, caption: "" },
+          { file: "primeira-parte-a-conquista-de-um-sonho-americano/career-32.jpg", w: 1206, h: 1408, caption: "" },
+          { file: "primeira-parte-a-conquista-de-um-sonho-americano/career-33.jpg", w: 736, h: 1600, caption: "" },
+          { file: "primeira-parte-a-conquista-de-um-sonho-americano/career-34.jpg", w: 903, h: 1600, caption: "" },
+        ] },
+        { slug: "primeira-parte-intervencao-do-destino", title: "Intervenção do Destino", titleEN: "", note: "", photos: [] },
+        { slug: "primeira-parte-uma-nova-vida-a-dois", title: "Uma Nova Vida a Dois", titleEN: "", note: "", photos: [] },
+        { slug: "primeira-parte-passo-a-passo", title: "Passo a Passo, Não Consigo Pensar em Nenhum Outro Modo de Se Realizar Algo", titleEN: "", note: "", photos: [] },
+        { slug: "primeira-parte-arquiteta-da-minha-realidade", title: "Arquiteta da Minha Realidade", titleEN: "", note: "", photos: [] },
+        { slug: "primeira-parte-viva-o-havai", title: "Viva o Havaí", titleEN: "", note: "", photos: [
+          { file: "primeira-parte-viva-o-havai/hawaii-01.jpg", w: 1280, h: 853, caption: "" },
+          { file: "primeira-parte-viva-o-havai/hawaii-02.jpg", w: 1280, h: 853, caption: "" },
+          { file: "primeira-parte-viva-o-havai/hawaii-03.jpg", w: 1200, h: 1600, caption: "" },
+          { file: "primeira-parte-viva-o-havai/hawaii-04.jpg", w: 1200, h: 1600, caption: "" },
+          { file: "primeira-parte-viva-o-havai/hawaii-05.jpg", w: 1200, h: 1600, caption: "" },
+          { file: "primeira-parte-viva-o-havai/hawaii-06.jpg", w: 1200, h: 1600, caption: "" },
+          { file: "primeira-parte-viva-o-havai/hawaii-07.jpg", w: 1200, h: 1600, caption: "" },
+          { file: "primeira-parte-viva-o-havai/hawaii-08.jpg", w: 1200, h: 1600, caption: "" },
+          { file: "primeira-parte-viva-o-havai/hawaii-09.jpg", w: 1600, h: 1200, caption: "" },
+          { file: "primeira-parte-viva-o-havai/hawaii-10.jpg", w: 1200, h: 1600, caption: "" },
+          { file: "primeira-parte-viva-o-havai/hawaii-11.jpg", w: 1164, h: 1600, caption: "" },
+          { file: "primeira-parte-viva-o-havai/hawaii-12.jpg", w: 1200, h: 1600, caption: "" },
+          { file: "primeira-parte-viva-o-havai/hawaii-13.jpg", w: 1200, h: 1600, caption: "" },
+          { file: "primeira-parte-viva-o-havai/hawaii-14.jpg", w: 1600, h: 1200, caption: "" },
+          { file: "primeira-parte-viva-o-havai/hawaii-15.jpg", w: 1200, h: 1600, caption: "" },
+        ] },
+        { slug: "primeira-parte-meu-anjo-da-guarda", title: "Meu Anjo da Guarda", titleEN: "", note: "", photos: [] },
+        { slug: "primeira-parte-campo-minado", title: "Campo Minado", titleEN: "", note: "", photos: [] },
+        { slug: "primeira-parte-os-tres-tracos", title: "Os Três Traços", titleEN: "", note: "", photos: [] },
+        { slug: "primeira-parte-a-traicao", title: "A Traição", titleEN: "", note: "", photos: [] },
+        { slug: "primeira-parte-ao-terceiro-dia", title: "Ao Terceiro Dia", titleEN: "", note: "", photos: [
+          { file: "primeira-parte-ao-terceiro-dia/tiago-divorcio-01.jpg", w: 909, h: 1600, caption: "" },
+        ] },
+        { slug: "primeira-parte-vai-atras-da-vida", title: "Vai Atrás da Vida, Que Ela Te Espera", titleEN: "", note: "", photos: [] },
+      ]
+    },
 
     // ---------------- SEGUNDA PARTE — NÔMADE DIGITAL ----------------
     {
@@ -467,6 +606,18 @@
   });
 
   // ---------- Table of contents, grouped by `part` in order of first appearance ----------
+  function buildSubList(ch){
+    if (!ch.subsections) return null;
+    const sub = document.createElement('ul');
+    sub.className = 'toc-sub';
+    ch.subsections.forEach(s => {
+      const subLi = document.createElement('li');
+      subLi.innerHTML = `<a href="#${s.slug}" data-slug="${ch.slug}" data-sub="${s.slug}">${s.title}</a>`;
+      sub.appendChild(subLi);
+    });
+    return sub;
+  }
+
   const parts = [];
   CHAPTERS.forEach(ch => { if (!parts.includes(ch.part)) parts.push(ch.part); });
   parts.forEach(partName => {
@@ -478,9 +629,14 @@
 
     if (chaptersInPart.length === 1 && chaptersInPart[0].title === partName){
       // A part with a single, self-titled chapter (Primeira Parte, for
-      // now) reads as one link rather than a label plus a redundant list.
-      label.innerHTML = `<a href="#${chaptersInPart[0].slug}" data-slug="${chaptersInPart[0].slug}">${partName}</a>`;
+      // now) reads as one link rather than a label plus a redundant list —
+      // its own subsections (if any) still list out underneath, same as
+      // any other chapter's.
+      const ch = chaptersInPart[0];
+      label.innerHTML = `<a href="#${ch.slug}" data-slug="${ch.slug}">${partName}</a>`;
       block.appendChild(label);
+      const sub = buildSubList(ch);
+      if (sub) block.appendChild(sub);
     } else {
       label.textContent = partName;
       block.appendChild(label);
@@ -488,16 +644,8 @@
       chaptersInPart.forEach(ch => {
         const li = document.createElement('li');
         li.innerHTML = `<a href="#${ch.slug}" data-slug="${ch.slug}">${ch.title}</a>`;
-        if (ch.subsections){
-          const sub = document.createElement('ul');
-          sub.className = 'toc-sub';
-          ch.subsections.forEach(s => {
-            const subLi = document.createElement('li');
-            subLi.innerHTML = `<a href="#${s.slug}" data-slug="${ch.slug}" data-sub="${s.slug}">${s.title}</a>`;
-            sub.appendChild(subLi);
-          });
-          li.appendChild(sub);
-        }
+        const sub = buildSubList(ch);
+        if (sub) li.appendChild(sub);
         ol.appendChild(li);
       });
       block.appendChild(ol);

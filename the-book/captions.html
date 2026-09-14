@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Captions — The Book</title>
+<style>
+  :root{
+    --ink:#000000; --paper:#ffffff; --line:#e5e5e5; --muted:#8c8c8c; --panel:#f2f2f2;
+    --ok:#0a7a2f;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:-apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif;
+    font-weight:400; -webkit-font-smoothing:antialiased;
+    padding: 40px 24px 100px;
+  }
+  .wrap{ max-width:900px; margin:0 auto; }
+  h1{ font-size:20px; margin:0 0 8px; }
+  p.intro{ font-size:14px; line-height:1.7; color:#333; max-width:70ch; }
+  .howto{
+    background:var(--panel); border-radius:8px; padding:18px 20px; margin:20px 0 40px;
+    font-size:13px; line-height:1.8; color:#333;
+  }
+  .howto ol{ margin:8px 0 0; padding-left:20px; }
+  .howto code{ background:#fff; border:1px solid var(--line); padding:1px 6px; border-radius:4px; font-size:12px; }
+
+  .chapter-block{ margin-bottom:56px; }
+  .chapter-block h2{
+    font-size:16px; margin:0 0 4px; padding-bottom:10px; border-bottom:2px solid var(--ink);
+  }
+  .chapter-block .part-tag{ font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:.08em; }
+  .copy-btn{
+    display:inline-block; margin:14px 0 20px;
+    font-size:13px; font-weight:600; padding:8px 16px; border-radius:6px;
+    border:1px solid var(--ink); background:var(--ink); color:#fff; cursor:pointer;
+  }
+  .copy-btn.copied{ background:var(--ok); border-color:var(--ok); }
+
+  .photo-grid{ display:grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap:20px; }
+  .card{ border:1px solid var(--line); border-radius:8px; overflow:hidden; background:#fff; }
+  .card .thumb{
+    width:100%; aspect-ratio: 4/3; background:var(--panel);
+    display:flex; align-items:center; justify-content:center; overflow:hidden;
+  }
+  .card .thumb img{ width:100%; height:100%; object-fit:cover; display:block; }
+  .card .thumb .missing{ font-size:10px; color:var(--muted); text-align:center; padding:10px; }
+  .card .meta{ padding:10px 12px; }
+  .card .fname{ font-size:11px; color:var(--muted); font-family:monospace; margin-bottom:6px; word-break:break-all; }
+  .card textarea{
+    width:100%; min-height:64px; font-size:13px; line-height:1.5; padding:8px;
+    border:1px solid var(--line); border-radius:6px; font-family:inherit; resize:vertical;
+  }
+
+  #output{
+    display:none; margin-top:16px;
+  }
+  #output textarea{
+    width:100%; min-height:160px; font-family:'SF Mono', Menlo, monospace; font-size:12px;
+    padding:12px; border:1px solid var(--line); border-radius:6px;
+  }
+  #output .label{ font-size:12px; color:var(--muted); margin-bottom:6px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Add captions</h1>
+  <p class="intro">Every photo currently on <code>the-book</code> is listed below, grouped by chapter, with a box under each one for its description. Type your captions, then use each chapter's "Copy code" button and paste the result into <code>the-book/index.html</code>.</p>
+
+  <div class="howto">
+    <strong>How to use this:</strong>
+    <ol>
+      <li>Write a caption in any box below (you don't have to do them all at once).</li>
+      <li>Click <strong>Copy code</strong> at the top of that chapter's section.</li>
+      <li>Open <code>the-book/index.html</code> in a text editor, search for that chapter's name (e.g. search <code>slug: "primeira-parte-origens"</code>), and replace everything from <code>photos: [</code> down to the matching <code>]</code> with what you just copied.</li>
+      <li>Save, then re-upload <code>the-book</code> to GitHub the same way as always.</li>
+    </ol>
+  </div>
+
+  <div id="chapters"></div>
+</div>
+
+<script>
+  // Same data as the-book/index.html's CHAPTERS array. If you add new
+  // photos or chapters there, copy the updated array here too so this
+  // tool stays in sync.
+  const CHAPTERS = [
+    {
+      part: "Primeira Parte",
+      slug: "primeira-parte",
+      title: "Primeira Parte",
+      titleEN: "",
+      note: "",
+      subsections: [
+        { slug: "primeira-parte-origens", title: "Origens", titleEN: "", note: "", photos: [
+          { file: "primeira-parte-origens/origens-01-yemenja.jpg", w: 786, h: 975, caption: "" },
+          { file: "primeira-parte-origens/origens-02-farm.jpg", w: 1200, h: 1600, caption: "" },
+          { file: "primeira-parte-origens/origens-03-farm.jpg", w: 1200, h: 1600, caption: "" },
+          { file: "primeira-parte-origens/origens-04-farm.jpg", w: 1200, h: 1600, caption: "" },
+          { file: "primeira-parte-origens/origens-05-tapioca.jpg", w: 1200, h: 1600, caption: "" },
+          { file: "primeira-parte-origens/origens-06-tapioca.jpg", w: 1200, h: 1600, caption: "" },
+          { file: "primeira-parte-origens/origens-07-tapioca.jpg", w: 1200, h: 1600, caption: "" },
+          { file: "primeira-parte-origens/origens-08-bar70.jpg", w: 1200, h: 1600, caption: "" },
+          { file: "primeira-parte-origens/origens-09.jpg", w: 786, h: 1183, caption: "" },
+          { file: "primeira-parte-origens/origens-10.jpg", w: 900, h: 1600, caption: "" },
+          { file: "primeira-parte-origens/origens-11.jpg", w: 1200, h: 1600, caption: "" },
+          { file: "primeira-parte-origens/origens-12.jpg", w: 1200, h: 1600, caption: "" },
+          { file: "primeira-parte-origens/origens-13-last-nye.jpg", w: 541, h: 720, caption: "" },
+        ] },
+        { slug: "primeira-parte-bastarda", title: "Bastarda", titleEN: "", note: "", photos: [
+          { file: "primeira-parte-bastarda/bastarda-01.jpg", w: 1600, h: 1094, caption: "" },
+        ] },
+        { slug: "primeira-parte-o-coelho-mau", title: "O Coelho Mau", titleEN: "", note: "", photos: [] },
+        { slug: "primeira-parte-estados-unidos", title: "Estados Unidos", titleEN: "", note: "", photos: [
+          { file: "primeira-parte-estados-unidos/estados-unidos-01.jpg", w: 1600, h: 1412, caption: "" },
+          { file: "primeira-parte-estados-unidos/estados-unidos-02.jpg", w: 1600, h: 1090, caption: "" },
+          { file: "primeira-parte-estados-unidos/estados-unidos-03.jpg", w: 1200, h: 1600, caption: "" },
+        ] },
+        { slug: "primeira-parte-meu-primeiro-amor", title: "Meu Primeiro Amor", titleEN: "", note: "", photos: [
+          { file: "primeira-parte-meu-primeiro-amor/highschool-01-clara.jpg", w: 1024, h: 768, caption: "" },
+          { file: "primeira-parte-meu-primeiro-amor/highschool-02-clara.jpg", w: 540, h: 720, caption: "" },
+          { file: "primeira-parte-meu-primeiro-amor/highschool-03-clara.jpg", w: 1024, h: 768, caption: "" },
+          { file: "primeira-parte-meu-primeiro-amor/highschool-04-clara.jpg", w: 900, h: 1600, caption: "" },
+          { file: "primeira-parte-meu-primeiro-amor/highschool-05-clara.jpg", w: 540, h: 720, caption: "" },
+          { file: "primeira-parte-meu-primeiro-amor/highschool-06.jpg", w: 900, h: 1600, caption: "" },
+          { file: "primeira-parte-meu-primeiro-amor/highschool-07.jpg", w: 900, h: 1600, caption: "" },
+          { file: "primeira-parte-meu-primeiro-amor/highschool-08.jpg", w: 720, h: 486, caption: "" },
+          { file: "primeira-parte-meu-primeiro-amor/highschool-09.jpg", w: 720, h: 540, caption: "" },
+        ] },
+        { slug: "primeira-parte-o-peso-da-responsabilidade", title: "O Peso da Responsabilidade", titleEN: "", note: "", photos: [
+          { file: "primeira-parte-o-peso-da-responsabilidade/peso-01-lifeguard.jpg", w: 720, h: 540, caption: "" },
+          { file: "primeira-parte-o-peso-da-responsabilidade/peso-02-waitress.jpg", w: 604, h: 453, caption: "" },
+        ] },
+        { slug: "primeira-parte-memorias-adormecidas", title: "Memórias Adormecidas", titleEN: "", note: "", photos: [
+          { file: "primeira-parte-memorias-adormecidas/childhood-tiago-01.jpg", w: 1600, h: 1200, caption: "" },
+          { file: "primeira-parte-memorias-adormecidas/de-volta-a-brazil-01.jpg", w: 960, h: 639, caption: "" },
+          { file: "primeira-parte-memorias-adormecidas/de-volta-a-brazil-02.jpg", w: 960, h: 639, caption: "" },
+          { file: "primeira-parte-memorias-adormecidas/de-volta-a-brazil-03.jpg", w: 960, h: 639, caption: "" },
+          { file: "primeira-parte-memorias-adormecidas/de-volta-a-brazil-04.jpg", w: 960, h: 639, caption: "" },
+          { file: "primeira-parte-memorias-adormecidas/de-volta-a-brazil-05.jpg", w: 960, h: 640, caption: "" },
+          { file: "primeira-parte-memorias-adormecidas/de-volta-a-brazil-06.jpg", w: 960, h: 639, caption: "" },
+          { file: "primeira-parte-memorias-adormecidas/de-volta-a-brazil-07.jpg", w: 960, h: 639, caption: "" },
+          { file: "primeira-parte-memorias-adormecidas/de-volta-a-brazil-08.jpg", w: 960, h: 639, caption: "" },
+          { file: "primeira-parte-memorias-adormecidas/de-volta-a-brazil-09.jpg", w: 1200, h: 1600, caption: "" },
+          { file: "primeira-parte-memorias-adormecidas/de-volta-a-brazil-10.jpg", w: 960, h: 639, caption: "" },
+          { file: "primeira-parte-memorias-adormecidas/de-volta-a-brazil-11.jpg", w: 639, h: 960, caption: "" },
+          { file: "primeira-parte-memorias-adormecidas/de-volta-a-brazil-12.jpg", w: 639, h: 960, caption: "" },
+          { file: "primeira-parte-memorias-adormecidas/de-volta-a-brazil-13.jpg", w: 960, h: 639, caption: "" },
+          { file: "primeira-parte-memorias-adormecidas/de-volta-a-brazil-14.jpg", w: 1200, h: 1600, caption: "" },
+          { file: "primeira-parte-memorias-adormecidas/de-volta-a-brazil-15.jpg", w: 960, h: 639, caption: "" },
+          { file: "primeira-parte-memorias-adormecidas/de-volta-a-brazil-16.jpg", w: 960, h: 639, caption: "" },
+          { file: "primeira-parte-memorias-adormecidas/de-volta-a-brazil-17.jpg", w: 960, h: 639, caption: "" },
+          { file: "primeira-parte-memorias-adormecidas/de-volta-a-brazil-18.jpg", w: 639, h: 960, caption: "" },
+          { file: "primeira-parte-memorias-adormecidas/de-volta-a-brazil-19.jpg", w: 1200, h: 1600, caption: "" },
+          { file: "primeira-parte-memorias-adormecidas/de-volta-a-brazil-20.jpg", w: 960, h: 639, caption: "" },
+          { file: "primeira-parte-memorias-adormecidas/de-volta-a-brazil-21.jpg", w: 960, h: 960, caption: "" },
+          { file: "primeira-parte-memorias-adormecidas/de-volta-a-brazil-22.jpg", w: 960, h: 639, caption: "" },
+          { file: "primeira-parte-memorias-adormecidas/de-volta-a-brazil-23.jpg", w: 960, h: 639, caption: "" },
+          { file: "primeira-parte-memorias-adormecidas/de-volta-a-brazil-24.jpg", w: 960, h: 639, caption: "" },
+          { file: "primeira-parte-memorias-adormecidas/de-volta-a-brazil-25.jpg", w: 960, h: 640, caption: "" },
+          { file: "primeira-parte-memorias-adormecidas/de-volta-a-brazil-26.jpg", w: 960, h: 639, caption: "" },
+          { file: "primeira-parte-memorias-adormecidas/de-volta-a-brazil-27.jpg", w: 924, h: 960, caption: "" },
+          { file: "primeira-parte-memorias-adormecidas/de-volta-a-brazil-28.jpg", w: 900, h: 1600, caption: "" },
+        ] },
+        { slug: "primeira-parte-quatro-dias", title: "Quatro Dias", titleEN: "", note: "", photos: [] },
+        { slug: "primeira-parte-a-conquista-de-um-sonho-americano", title: "A Conquista de um Sonho Americano", titleEN: "", note: "", photos: [
+          { file: "primeira-parte-a-conquista-de-um-sonho-americano/career-01.jpg", w: 864, h: 1296, caption: "" },
+          { file: "primeira-parte-a-conquista-de-um-sonho-americano/career-02.jpg", w: 1296, h: 864, caption: "" },
+          { file: "primeira-parte-a-conquista-de-um-sonho-americano/career-03.jpg", w: 1232, h: 821, caption: "" },
+          { file: "primeira-parte-a-conquista-de-um-sonho-americano/career-04.jpg", w: 1200, h: 1600, caption: "" },
+          { file: "primeira-parte-a-conquista-de-um-sonho-americano/career-05.jpg", w: 1067, h: 1600, caption: "" },
+          { file: "primeira-parte-a-conquista-de-um-sonho-americano/career-06.jpg", w: 1339, h: 1600, caption: "" },
+          { file: "primeira-parte-a-conquista-de-um-sonho-americano/career-07.jpg", w: 1600, h: 1200, caption: "" },
+          { file: "primeira-parte-a-conquista-de-um-sonho-americano/career-08.jpg", w: 1366, h: 768, caption: "" },
+          { file: "primeira-parte-a-conquista-de-um-sonho-americano/career-09.jpg", w: 1600, h: 1066, caption: "" },
+          { file: "primeira-parte-a-conquista-de-um-sonho-americano/career-10.jpg", w: 1600, h: 1067, caption: "" },
+          { file: "primeira-parte-a-conquista-de-um-sonho-americano/career-11.jpg", w: 1600, h: 1067, caption: "" },
+          { file: "primeira-parte-a-conquista-de-um-sonho-americano/career-12.jpg", w: 1600, h: 1067, caption: "" },
+          { file: "primeira-parte-a-conquista-de-um-sonho-americano/career-13.jpg", w: 1067, h: 1600, caption: "" },
+          { file: "primeira-parte-a-conquista-de-um-sonho-americano/career-14.jpg", w: 1067, h: 1600, caption: "" },
+          { file: "primeira-parte-a-conquista-de-um-sonho-americano/career-15.jpg", w: 1600, h: 1055, caption: "" },
+          { file: "primeira-parte-a-conquista-de-um-sonho-americano/career-16.jpg", w: 1600, h: 1066, caption: "" },
+          { file: "primeira-parte-a-conquista-de-um-sonho-americano/career-17.jpg", w: 1600, h: 1061, caption: "" },
+          { file: "primeira-parte-a-conquista-de-um-sonho-americano/career-18.jpg", w: 1144, h: 1600, caption: "" },
+          { file: "primeira-parte-a-conquista-de-um-sonho-americano/career-19.jpg", w: 1600, h: 1200, caption: "" },
+          { file: "primeira-parte-a-conquista-de-um-sonho-americano/career-20.jpg", w: 1366, h: 768, caption: "" },
+          { file: "primeira-parte-a-conquista-de-um-sonho-americano/career-21.jpg", w: 960, h: 1280, caption: "" },
+          { file: "primeira-parte-a-conquista-de-um-sonho-americano/career-22.jpg", w: 1200, h: 1600, caption: "" },
+          { file: "primeira-parte-a-conquista-de-um-sonho-americano/career-23.jpg", w: 1200, h: 1600, caption: "" },
+          { file: "primeira-parte-a-conquista-de-um-sonho-americano/career-24.jpg", w: 679, h: 1024, caption: "" },
+          { file: "primeira-parte-a-conquista-de-um-sonho-americano/career-25.jpg", w: 679, h: 1024, caption: "" },
+          { file: "primeira-parte-a-conquista-de-um-sonho-americano/career-26.jpg", w: 1280, h: 854, caption: "" },
+          { file: "primeira-parte-a-conquista-de-um-sonho-americano/career-27.jpg", w: 1280, h: 854, caption: "" },
+          { file: "primeira-parte-a-conquista-de-um-sonho-americano/career-28.jpg", w: 1280, h: 854, caption: "" },
+          { file: "primeira-parte-a-conquista-de-um-sonho-americano/career-29.jpg", w: 1600, h: 1200, caption: "" },
+          { file: "primeira-parte-a-conquista-de-um-sonho-americano/career-30.jpg", w: 1500, h: 1200, caption: "" },
+          { file: "primeira-parte-a-conquista-de-um-sonho-americano/career-31.jpg", w: 905, h: 1600, caption: "" },
+          { file: "primeira-parte-a-conquista-de-um-sonho-americano/career-32.jpg", w: 1206, h: 1408, caption: "" },
+          { file: "primeira-parte-a-conquista-de-um-sonho-americano/career-33.jpg", w: 736, h: 1600, caption: "" },
+          { file: "primeira-parte-a-conquista-de-um-sonho-americano/career-34.jpg", w: 903, h: 1600, caption: "" },
+        ] },
+        { slug: "primeira-parte-intervencao-do-destino", title: "Intervenção do Destino", titleEN: "", note: "", photos: [] },
+        { slug: "primeira-parte-uma-nova-vida-a-dois", title: "Uma Nova Vida a Dois", titleEN: "", note: "", photos: [] },
+        { slug: "primeira-parte-passo-a-passo", title: "Passo a Passo, Não Consigo Pensar em Nenhum Outro Modo de Se Realizar Algo", titleEN: "", note: "", photos: [] },
+        { slug: "primeira-parte-arquiteta-da-minha-realidade", title: "Arquiteta da Minha Realidade", titleEN: "", note: "", photos: [] },
+        { slug: "primeira-parte-viva-o-havai", title: "Viva o Havaí", titleEN: "", note: "", photos: [
+          { file: "primeira-parte-viva-o-havai/hawaii-01.jpg", w: 1280, h: 853, caption: "" },
+          { file: "primeira-parte-viva-o-havai/hawaii-02.jpg", w: 1280, h: 853, caption: "" },
+          { file: "primeira-parte-viva-o-havai/hawaii-03.jpg", w: 1200, h: 1600, caption: "" },
+          { file: "primeira-parte-viva-o-havai/hawaii-04.jpg", w: 1200, h: 1600, caption: "" },
+          { file: "primeira-parte-viva-o-havai/hawaii-05.jpg", w: 1200, h: 1600, caption: "" },
+          { file: "primeira-parte-viva-o-havai/hawaii-06.jpg", w: 1200, h: 1600, caption: "" },
+          { file: "primeira-parte-viva-o-havai/hawaii-07.jpg", w: 1200, h: 1600, caption: "" },
+          { file: "primeira-parte-viva-o-havai/hawaii-08.jpg", w: 1200, h: 1600, caption: "" },
+          { file: "primeira-parte-viva-o-havai/hawaii-09.jpg", w: 1600, h: 1200, caption: "" },
+          { file: "primeira-parte-viva-o-havai/hawaii-10.jpg", w: 1200, h: 1600, caption: "" },
+          { file: "primeira-parte-viva-o-havai/hawaii-11.jpg", w: 1164, h: 1600, caption: "" },
+          { file: "primeira-parte-viva-o-havai/hawaii-12.jpg", w: 1200, h: 1600, caption: "" },
+          { file: "primeira-parte-viva-o-havai/hawaii-13.jpg", w: 1200, h: 1600, caption: "" },
+          { file: "primeira-parte-viva-o-havai/hawaii-14.jpg", w: 1600, h: 1200, caption: "" },
+          { file: "primeira-parte-viva-o-havai/hawaii-15.jpg", w: 1200, h: 1600, caption: "" },
+        ] },
+        { slug: "primeira-parte-meu-anjo-da-guarda", title: "Meu Anjo da Guarda", titleEN: "", note: "", photos: [] },
+        { slug: "primeira-parte-campo-minado", title: "Campo Minado", titleEN: "", note: "", photos: [] },
+        { slug: "primeira-parte-os-tres-tracos", title: "Os Três Traços", titleEN: "", note: "", photos: [] },
+        { slug: "primeira-parte-a-traicao", title: "A Traição", titleEN: "", note: "", photos: [] },
+        { slug: "primeira-parte-ao-terceiro-dia", title: "Ao Terceiro Dia", titleEN: "", note: "", photos: [
+          { file: "primeira-parte-ao-terceiro-dia/tiago-divorcio-01.jpg", w: 909, h: 1600, caption: "" },
+        ] },
+        { slug: "primeira-parte-vai-atras-da-vida", title: "Vai Atrás da Vida, Que Ela Te Espera", titleEN: "", note: "", photos: [] },
+      ]
+    },
+
+    {
+      part: "Segunda Parte — Nômade Digital",
+      slug: "mexico",
+      title: "México",
+      titleEN: "",
+      note: "",
+      subsections: [
+        { slug: "mexico-tudo-parece-diferente-agora", title: "Tudo Parece Diferente Agora", titleEN: "", note: "", photos: [] },
+        { slug: "mexico-aprendendo-a-aceitar-a-beleza-do-imperfeito", title: "Aprendendo a Aceitar a Beleza do Imperfeito", titleEN: "", note: "", photos: [] },
+        { slug: "mexico-a-possibilidade-de-viver-sem-amarras", title: "A Possibilidade de Viver Sem Amarras", titleEN: "", note: "", photos: [] },
+      ]
+    },
+    { part: "Segunda Parte — Nômade Digital", slug: "colombia", title: "Colômbia", titleEN: "", note: "", photos: [] },
+    { part: "Segunda Parte — Nômade Digital", slug: "peru", title: "Peru", titleEN: "", note: "", photos: [] },
+    { part: "Segunda Parte — Nômade Digital", slug: "argentina", title: "Argentina", titleEN: "", note: "", photos: [] },
+    { part: "Segunda Parte — Nômade Digital", slug: "brasil", title: "Brasil", titleEN: "", note: "", photos: [] },
+  ];
+
+  // Flatten to a list of sections that actually have photos.
+  const sections = [];
+  CHAPTERS.forEach(ch => {
+    if (ch.subsections) {
+      ch.subsections.forEach(sub => {
+        if (sub.photos.length) sections.push({ part: ch.part, chapterTitle: ch.title, title: sub.title, slug: sub.slug, photos: sub.photos });
+      });
+    } else if (ch.photos && ch.photos.length) {
+      sections.push({ part: ch.part, chapterTitle: ch.title, title: ch.title, slug: ch.slug, photos: ch.photos });
+    }
+  });
+
+  const root = document.getElementById('chapters');
+
+  function escapeForJs(s){
+    return s.replace(/\\/g, '\\\\').replace(/"/g, '\\"');
+  }
+
+  sections.forEach(sec => {
+    const block = document.createElement('div');
+    block.className = 'chapter-block';
+
+    const heading = document.createElement('div');
+    heading.innerHTML = `<div class="part-tag">${sec.part}</div><h2>${sec.title}</h2>`;
+    block.appendChild(heading);
+
+    const btn = document.createElement('button');
+    btn.className = 'copy-btn';
+    btn.textContent = 'Copy code for this chapter (' + sec.photos.length + ' photo' + (sec.photos.length === 1 ? '' : 's') + ')';
+    block.appendChild(btn);
+
+    const output = document.createElement('div');
+    output.id = 'output';
+    output.innerHTML = `<div class="label">Paste this over that chapter's existing <code>photos: [ ... ]</code> block:</div><textarea readonly></textarea>`;
+    block.appendChild(output);
+    const outputTA = output.querySelector('textarea');
+
+    const grid = document.createElement('div');
+    grid.className = 'photo-grid';
+
+    sec.photos.forEach((p, i) => {
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.innerHTML = `
+        <div class="thumb">
+          <img src="photos/${p.file}" alt="" loading="lazy"
+               onerror="this.style.display='none'; this.nextElementSibling.style.display='block'">
+          <div class="missing" style="display:none">Preview not found — make sure this file is in the-book/photos/</div>
+        </div>
+        <div class="meta">
+          <div class="fname">${p.file.split('/').pop()}</div>
+          <textarea data-idx="${i}" placeholder="Write a description for this photo...">${p.caption || ''}</textarea>
+        </div>`;
+      grid.appendChild(card);
+    });
+
+    block.appendChild(grid);
+    root.appendChild(block);
+
+    btn.addEventListener('click', () => {
+      const lines = sec.photos.map((p, i) => {
+        const ta = grid.querySelector(`textarea[data-idx="${i}"]`);
+        const caption = escapeForJs(ta.value.trim());
+        return `          { file: "${p.file}", w: ${p.w}, h: ${p.h}, caption: "${caption}" },`;
+      });
+      const code = 'photos: [\n' + lines.join('\n') + '\n        ]';
+      outputTA.value = code;
+      output.style.display = 'block';
+      outputTA.select();
+      let copied = false;
+      try {
+        navigator.clipboard.writeText(code);
+        copied = true;
+      } catch (err) { /* fall back to manual select above */ }
+      try {
+        document.execCommand('copy');
+        copied = true;
+      } catch (err) { /* ignore */ }
+      btn.textContent = copied ? 'Copied ✓ — paste into index.html' : 'Select the text below and copy it';
+      btn.classList.add('copied');
+      setTimeout(() => {
+        btn.textContent = 'Copy code for this chapter (' + sec.photos.length + ' photo' + (sec.photos.length === 1 ? '' : 's') + ')';
+        btn.classList.remove('copied');
+      }, 4000);
+    });
+  });
+</script>
+</body>
+</html>
