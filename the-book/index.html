@@ -203,27 +203,27 @@
      instead, like a photo essay: full photo, then its description, then
      the next one — so editors and readers can follow the story in order. */
   .photo-essay{
-    max-width: 760px;
+    max-width: 1100px;
     margin: 0 auto 10px;
-    display:flex;
-    flex-direction:column;
-    gap: 64px;
+    display:grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 10px;
   }
   .photo-block .placeholder{
     position:relative;
     width:100%;
+    aspect-ratio: 1 / 1;
     background: var(--panel);
     display:flex; align-items:center; justify-content:center;
     overflow:hidden;
-    min-height:60px;
     cursor:zoom-in;
   }
   .photo-block .placeholder:hover{opacity:.9;}
   .photo-block .placeholder img{
     position:static;
     width:100%;
-    height:auto;
-    object-fit:initial;
+    height:100%;
+    object-fit:cover;
   }
   .photo-block .placeholder .label{
     font-size:10px; letter-spacing:.14em; text-transform:uppercase;
@@ -231,15 +231,18 @@
     text-align:center; padding:20px;
   }
   .photo-block .placeholder.has-image .label{display:none;}
-  .photo-block figcaption{
-    margin-top:16px;
+  .lightbox figcaption{
+    color:#fff;
     font-size:14px;
-    line-height:1.75;
-    color:var(--ink);
+    line-height:1.7;
     font-weight:300;
+    text-align:center;
+    max-width:640px;
+    margin:18px auto 0;
+    padding:0 20px;
   }
-  .photo-block figcaption.placeholder-caption{
-    color:var(--muted);
+  .lightbox figcaption.placeholder-caption{
+    color:rgba(255,255,255,.55);
     font-style:italic;
     font-size:13px;
   }
@@ -560,15 +563,12 @@
     }
     return `<div class="photo-essay">` + photos.map(p => `
       <figure class="photo-block">
-        <div class="placeholder">
+        <div class="placeholder" data-caption="${(p.caption || '').replace(/"/g, '&quot;')}">
           <div class="label">${p.file}</div>
           <img src="photos/${p.file}" alt="${(p.caption || '').replace(/"/g, '&quot;')}" width="${p.w}" height="${p.h}" loading="lazy"
                onerror="this.style.display='none'"
                onload="this.parentElement.classList.add('has-image')">
         </div>
-        ${p.caption
-          ? `<figcaption>${p.caption}</figcaption>`
-          : `<figcaption class="placeholder-caption">No description added yet</figcaption>`}
       </figure>`).join('') + `</div>`;
   }
 
@@ -668,7 +668,13 @@
       bodyEl.innerHTML = chapterBodyHTML(ch);
       bodyEl.dataset.rendered = 'true';
       bodyEl.querySelectorAll('.photo-block .placeholder').forEach(el => {
-        el.addEventListener('click', () => openLightbox(el.innerHTML));
+        el.addEventListener('click', () => {
+          const cap = el.dataset.caption;
+          const capHTML = cap
+            ? `<figcaption>${cap}</figcaption>`
+            : `<figcaption class="placeholder-caption">No description added yet</figcaption>`;
+          openLightbox(el.innerHTML + capHTML);
+        });
       });
     }
 
